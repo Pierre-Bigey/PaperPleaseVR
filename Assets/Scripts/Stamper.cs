@@ -7,7 +7,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class Stamper : MonoBehaviour
 {
     [SerializeField] private GameObject AccessStamp;
-    [SerializeField] private GameObject StampContact;
     [SerializeField] private float rayRange = 0.005f;
     private XRGrabInteractable XRGI;
 
@@ -19,26 +18,6 @@ public class Stamper : MonoBehaviour
        
     }
 
-    /*private void Update()
-    {
-        if (XRGI.isSelected)
-        {
-            RaycastHit hit;
-            //Debug.Log("GRABBBBED");
-            Debug.DrawLine(StampContact.transform.position ,StampContact.transform.position -StampContact.transform.up ,Color.green,Time.deltaTime);
-            if (Physics.Raycast(StampContact.transform.position, -StampContact.transform.up, out hit, 0.01f))
-            {
-                if (hit.collision.gameObject.layer == 10 && !stamping)
-                {
-                    stamping = true;
-                    Stamp(hit);
-                }
-                
-            }
-            else stamping = false;
-        }
-    }*/
-
     private void Stamp(RaycastHit hit )
     {
         GameObject passport = hit.collider.gameObject;
@@ -46,8 +25,9 @@ public class Stamper : MonoBehaviour
         GameObject stamp = Instantiate(AccessStamp);
         stamp.transform.position = hit.point;
         stamp.transform.position += hit.normal * 0.001f;
+        stamp.transform.rotation = transform.rotation;
         stamp.transform.forward = - hit.normal;
-        stamp.transform.parent = passport.transform;
+        //stamp.transform.parent = passport.transform;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -56,16 +36,20 @@ public class Stamper : MonoBehaviour
 
         if (passport.CompareTag("Passport"))
         {
-            Debug.Log("On collision Enter for "+this.name);
+            Debug.Log("On collision Enter for "+this.name+" with : "+passport.name);
             if (XRGI.isSelected && !stamping)
             {
                 RaycastHit hit;
                 LayerMask passportOpened = LayerMask.GetMask("PassportStampPage");
-                Debug.Log("Sending raycast");
+                
                 //Debug.Log("GRABBBBED");
-                //Debug.DrawLine(StampContact.transform.position ,StampContact.transform.position,Color.green,Time.deltaTime);
-                if (Physics.Raycast(this.transform.position -this.transform.up * (this.transform.localScale.y /2- rayRange ) , 
-                        -this.transform.up, out hit, rayRange *2,passportOpened))
+                Debug.Log("Local scale = " + transform.localScale.y);
+                //Vector3 origin = transform.position - transform.up * (transform.localScale.y / 2 - rayRange);
+                Vector3 origin = transform.position;
+                Vector3 direction = -transform.up;
+                Debug.Log("Sending raycast from :"+origin.ToString("F3")+ " with as direction :"+direction.ToString());
+                Debug.DrawLine(origin,origin + direction * rayRange*2,Color.magenta,1);
+                if (Physics.Raycast(origin, direction, out hit, rayRange *2,passportOpened))
                 {
                     stamping = true;
                     Stamp(hit);
