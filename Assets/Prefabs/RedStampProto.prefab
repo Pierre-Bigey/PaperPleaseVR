@@ -362,5 +362,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AccessStamp: {fileID: 4036762481709566646, guid: 07ca5184660c61642ab6e19cdbe3945a,
     type: 3}
-  StampContact: {fileID: 5856826609704355043}
-  rayRange: 0.005
+  rayRange: 0.01

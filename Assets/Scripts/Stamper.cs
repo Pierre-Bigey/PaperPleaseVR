@@ -25,9 +25,14 @@ public class Stamper : MonoBehaviour
         GameObject stamp = Instantiate(AccessStamp);
         stamp.transform.position = hit.point;
         stamp.transform.position += hit.normal * 0.001f;
-        stamp.transform.rotation = transform.rotation;
+        
+        /*stamp.transform.right = transform.right;
+        stamp.transform.up = transform.forward;*/
+        stamp.transform.rotation = Quaternion.Euler(this.transform.eulerAngles + new Vector3(90, 0, 0));
         stamp.transform.forward = - hit.normal;
-        //stamp.transform.parent = passport.transform;
+        float angle = Vector3.SignedAngle(stamp.transform.right, transform.right,stamp.transform.forward);
+        stamp.transform.Rotate(stamp.transform.right,angle);
+        //stamp.transform.SetParent(passport.transform, true);
     }
 
     private void OnCollisionEnter(Collision collision)
