@@ -28,7 +28,7 @@ public class Stamper : MonoBehaviour
             Debug.DrawLine(StampContact.transform.position ,StampContact.transform.position -StampContact.transform.up ,Color.green,Time.deltaTime);
             if (Physics.Raycast(StampContact.transform.position, -StampContact.transform.up, out hit, 0.01f))
             {
-                if (hit.collider.gameObject.layer == 10 && !stamping)
+                if (hit.collision.gameObject.layer == 10 && !stamping)
                 {
                     stamping = true;
                     Stamp(hit);
@@ -42,7 +42,7 @@ public class Stamper : MonoBehaviour
     private void Stamp(RaycastHit hit )
     {
         GameObject passport = hit.collider.gameObject;
-        Debug.Log("[Stamper] Stamping acces denied on " + passport.name);
+        Debug.Log("[Stamper] Stamping  on " + passport.name);
         GameObject stamp = Instantiate(AccessStamp);
         stamp.transform.position = hit.point;
         stamp.transform.position += hit.normal * 0.001f;
@@ -50,18 +50,22 @@ public class Stamper : MonoBehaviour
         stamp.transform.parent = passport.transform;
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision collision)
     {
-        GameObject passport = other.gameObject;
-        if (passport.tag == "Passport")
+        GameObject passport = collision.gameObject;
+
+        if (passport.CompareTag("Passport"))
         {
             Debug.Log("On collision Enter for "+this.name);
             if (XRGI.isSelected && !stamping)
             {
                 RaycastHit hit;
+                LayerMask passportOpened = LayerMask.GetMask("PassportStampPage");
+                Debug.Log("Sending raycast");
                 //Debug.Log("GRABBBBED");
                 //Debug.DrawLine(StampContact.transform.position ,StampContact.transform.position,Color.green,Time.deltaTime);
-                if (Physics.Raycast(this.transform.position -this.transform.up * (this.transform.localScale.y /2- rayRange ) , -this.transform.up, out hit, rayRange *2))
+                if (Physics.Raycast(this.transform.position -this.transform.up * (this.transform.localScale.y /2- rayRange ) , 
+                        -this.transform.up, out hit, rayRange *2,passportOpened))
                 {
                     stamping = true;
                     Stamp(hit);
