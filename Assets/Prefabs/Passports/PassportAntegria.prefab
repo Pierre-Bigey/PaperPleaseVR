@@ -56,7 +56,7 @@ MonoBehaviour:
   sexText: {fileID: 3770372723284251496}
   dobText: {fileID: 6803966225629356276}
   idText: {fileID: 2544538188943307297}
-  photoImage: {fileID: 2659716845261237094}
+  photoImage: {fileID: 0}
   isOpened: 0
 --- !u!54 &2442323467502274945
 Rigidbody:
@@ -94,7 +94,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 4294967295
+    m_Bits: 256
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -487,18 +487,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2659716845261237094 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5255008710619546181, guid: 19fd4de7c5536b640b4e007ccbc7d31e,
-    type: 3}
-  m_PrefabInstance: {fileID: 7783553818685663523}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3770372723284251496 stripped
