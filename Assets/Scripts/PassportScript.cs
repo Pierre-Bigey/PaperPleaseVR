@@ -23,6 +23,7 @@ public class PassportScript : MonoBehaviour
     {
         //isOpened = false;
         CorrectIsOpened();
+        
     }
 
     private void CorrectIsOpened()
