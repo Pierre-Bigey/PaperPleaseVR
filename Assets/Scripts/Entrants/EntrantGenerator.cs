@@ -38,7 +38,9 @@ public class EntrantGenerator : MonoBehaviour
         //Debug.Log(entrantData.ToJSon());
         //EntrantManager.EntrantData entrantData1 = EntrantManager.LoadEntrant(1);
         //for(int i = 0; i<10;i++) Debug.Log(getRandomDateOfBirth());
-        SummonPassport(GenerateEntrant());
+        EntrantManager.EntrantData entrantData = GenerateEntrant();
+        SummonPassport(entrantData);
+        SummonEntryPermit(entrantData);
         // SummonPassport(GenerateEntrant());
         // SummonPassport(GenerateEntrant());
         // SummonPassport(GenerateEntrant());

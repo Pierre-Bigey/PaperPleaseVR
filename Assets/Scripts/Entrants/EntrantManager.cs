@@ -97,7 +97,7 @@ namespace Entrants
             [SerializeField] internal string issuingCity;
             [SerializeField] internal string iD;
             [SerializeField] internal Sex sex;
-            [FormerlySerializedAs("origin")] [SerializeField] internal Country originCountry;
+            [SerializeField] internal Country originCountry;
             [SerializeField] internal EntrantType type;
             
             
@@ -127,9 +127,10 @@ namespace Entrants
                 this.originCountry = originCountry;
                 this.type = type;
                 
-                passport =  new PassportData(this, DateTime.Today.ToString(new CultureInfo("ja-JP")));
-                workPass = new WorkPassData(this, DateTime.Today.ToString(new CultureInfo("ja-JP")));
-                
+                passport =  new PassportData(this);
+                workPass = new WorkPassData(this);
+                entryPermit = new EntryPermit(this);
+
             }
 
             //(string name, string exp, string iss, string sex, string dob, string id)
@@ -138,7 +139,7 @@ namespace Entrants
                 PassportData ps = this.passport;
                 string sexString = ps.sex.ToString();
                 //Return Name, EXP, ISS, SEX, DOB, ID 
-                return (ps.firstName + "," + ps.surName, ps.expirationDate.ToShortDateString(), ps.issuingCity,  ps.sex.ToString()[0].ToString(),
+                return (ps.firstName + ", " + ps.surName, ps.expirationDate.ToShortDateString(), ps.issuingCity,  ps.sex.ToString()[0].ToString(),
                     ps.dateOfBirth.ToShortDateString(), ps.iD);
             }
             
@@ -147,8 +148,8 @@ namespace Entrants
             {
                 EntryPermit ep = this.entryPermit;
                 //Return Name, EXP, ISS, SEX, DOB, ID 
-                return (ep.firstName + "," + ep.surName, ep.iD, ep.purpose.ToString(),  ep.duration,
-                    ep.enterByDate);
+                return (ep.firstName + ", " + ep.surName, ep.iD, ep.purpose.ToString(),  ep.duration,
+                    ep.enterByDate.ToShortDateString());
             }
             
             
@@ -201,7 +202,7 @@ namespace Entrants
             [SerializeField] public Sex sex;
             [SerializeField] public DateTime expirationDate;
             [SerializeField] public string issuingCity;
-            public PassportData(EntrantData entrantData, string expirationDate)
+            public PassportData(EntrantData entrantData)
             {
                 this.surName = entrantData.surName;
                 this.firstName = entrantData.firstName;
@@ -225,7 +226,7 @@ namespace Entrants
             [SerializeField] public WorkField field;
             [SerializeField] public string expirationDate;
             
-            public WorkPassData(EntrantData entrantData, string expirationDate)
+            public WorkPassData(EntrantData entrantData)
             {
                 this.surName = entrantData.surName;
                 this.firstName = entrantData.firstName;
@@ -233,7 +234,7 @@ namespace Entrants
                 Array fields = Enum.GetValues(typeof(WorkField));
                 this.field = (WorkField)fields.GetValue(random.Next(Enum.GetValues(typeof(WorkField)).Length));
                 
-                this.expirationDate = expirationDate;
+                this.expirationDate = DateTime.Today.ToString();
             }
         }
 
@@ -249,13 +250,13 @@ namespace Entrants
             [SerializeField] internal string iD;
             [SerializeField] public EntrantType purpose;
             [SerializeField] public string duration;
-            [SerializeField] public string enterByDate;
-            public EntryPermit(EntrantData entrantData, EntrantType purpose,string enterByDate)
+            [SerializeField] public DateTime enterByDate;
+            public EntryPermit(EntrantData entrantData)
             {
                 this.surName = entrantData.surName;
                 this.firstName = entrantData.firstName;
                 this.iD = entrantData.iD;
-                this.purpose = purpose;
+                this.purpose = entrantData.type;
                 string duration = "";
 
                 List<string> limitedDurations = new List<string>() { "2 days", "14 days", "1 month", "2 month", "3 month", "6 month", "1 year" };
@@ -275,9 +276,10 @@ namespace Entrants
                         duration = "forever";
                         break;
                 }
-                
                 this.duration = duration;
-                this.enterByDate = enterByDate;
+
+                int daysLeft = random.Next(8);
+                this.enterByDate = GameManager.Instance.date.AddDays(daysLeft);
             }
         }
 

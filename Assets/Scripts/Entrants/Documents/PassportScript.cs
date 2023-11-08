@@ -40,7 +40,9 @@ public class PassportScript : MonoBehaviour
         issText.SetText(data.Item3);
         sexText.SetText(data.Item4);
         dobText.SetText(data.Item5);
-        idText.SetText(data.Item6);
+        string id = data.Item6;
+        string id_ = id.Substring(0,4)+"-"+id.Substring(4);
+        idText.SetText(id_);
     }
 
     public void SwitchIsOpened()

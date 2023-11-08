@@ -17,7 +17,9 @@ public class EntryPermitScript : MonoBehaviour
     public void SetData((string, string, string, string, string) data)
     {
         nameText.SetText(data.Item1);
-        idText.SetText(data.Item2);
+        string id = data.Item2;
+        string id_ = id.Substring(0,4)+"-"+id.Substring(4);
+        idText.SetText(id_);
         purposeText.SetText(data.Item3);
         durationText.SetText(data.Item4);
         enterByDateText.SetText(data.Item5);
