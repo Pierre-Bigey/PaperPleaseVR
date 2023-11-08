@@ -10,11 +10,15 @@ using Random = System.Random;
 public class EntrantGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject passportPrefab;
+    [SerializeField] private GameObject entryPermitPrefab;
     [SerializeField] private GameObject entrantBody;
 
     [SerializeField] private TextAsset surNamesTextAsset;
     [SerializeField] private TextAsset firstNameMaleTextAsset;
     [SerializeField] private TextAsset firstNameFemaleTextAsset;
+    
+    int maxAge = 75;
+    int minAge = 18;
 
     private IDictionary<GameObject, EntrantManager.EntrantData> entrantDict;
     private Random random;
@@ -34,10 +38,10 @@ public class EntrantGenerator : MonoBehaviour
         //Debug.Log(entrantData.ToJSon());
         //EntrantManager.EntrantData entrantData1 = EntrantManager.LoadEntrant(1);
         //for(int i = 0; i<10;i++) Debug.Log(getRandomDateOfBirth());
-        CreatePassport(GenerateEntrant());
-        // CreatePassport(GenerateEntrant());
-        // CreatePassport(GenerateEntrant());
-        // CreatePassport(GenerateEntrant());
+        SummonPassport(GenerateEntrant());
+        // SummonPassport(GenerateEntrant());
+        // SummonPassport(GenerateEntrant());
+        // SummonPassport(GenerateEntrant());
         //SummonEntrant(0);
     }
 
@@ -46,14 +50,21 @@ public class EntrantGenerator : MonoBehaviour
         GameObject entrant = Instantiate(entrantBody);
         EntrantManager.EntrantData entrantData = EntrantManager.LoadEntrant(index);
         entrantDict.Add(entrant,entrantData);
-        CreatePassport(entrantData);
+        SummonPassport(entrantData);
     }
 
-    private void CreatePassport(EntrantManager.EntrantData entrantData)
+    private void SummonPassport(EntrantManager.EntrantData entrantData)
     {
         GameObject passport = Instantiate(passportPrefab,transform);
         PassportScript passScript = passport.GetComponent<PassportScript>();
         passScript.SetData(entrantData.GetPassportData());
+    }
+
+    private void SummonEntryPermit(EntrantManager.EntrantData entrantData)
+    {
+        GameObject entryPermit = Instantiate(entryPermitPrefab, transform);
+        EntryPermitScript entryPermitScript = entryPermit.GetComponent<EntryPermitScript>();
+        entryPermitScript.SetData(entrantData.GetEntryPermitData());
     }
 
     private EntrantManager.EntrantData GenerateEntrant()
@@ -63,15 +74,16 @@ public class EntrantGenerator : MonoBehaviour
         EntrantManager.Sex sex = GetRandomSex();
         if(sex == EntrantManager.Sex.Male) firstName = getRandomName(firstNameMaleTextAsset);
         else firstName = getRandomName(firstNameFemaleTextAsset);
-        string dateOfBirth = getRandomDateOfBirth();
+        DateTime dateOfBirth = getRandomDateOfBirth();
         string id = GetId();
-        EntrantManager.Country origin = GetRandomCountry();
+        EntrantManager.Country originCountry = GetRandomCountry();
         EntrantManager.EntrantType type;
-        if (origin != EntrantManager.Country.ARSTOTKKA) type = EntrantManager.EntrantType.CITIZEN;
+        if (originCountry != EntrantManager.Country.ARSTOTKKA) type = EntrantManager.EntrantType.CITIZEN;
         else type = GetRandomForeignerType();
 
+        string issuincity = GetRandomIssuingCity(originCountry);
 
-        return new EntrantManager.EntrantData(surName, firstName, id, sex, dateOfBirth, "Paris", origin, type);
+        return new EntrantManager.EntrantData(surName, firstName, id, sex, dateOfBirth, issuincity, originCountry, type);
     }
     
     
@@ -94,9 +106,13 @@ public class EntrantGenerator : MonoBehaviour
         return nameList[random.Next(nameList.Count)];
     }
 
-    private string getRandomDateOfBirth()
+    private DateTime getRandomDateOfBirth()
     {
-        var longMonth = new List<int> {1, 2, 5, 7, 8, 10, 12};
+        int age = random.Next(minAge, maxAge);
+        int daySinceBirthday = random.Next(366);
+        DateTime birthDay = GameManager.Instance.date.AddYears(-age).AddDays(-daySinceBirthday);
+        
+        /*var longMonth = new List<int> {1, 2, 5, 7, 8, 10, 12};
         
         int year = random.Next(1914, 1965);
         int month = random.Next(1,13);
@@ -110,8 +126,9 @@ public class EntrantGenerator : MonoBehaviour
         if (month < 10) monthString = "0" + month.ToString();
 
         string dayString = day.ToString();
-        if (day < 10) dayString = "0" + day.ToString();
-        return year.ToString()+"."+monthString+"."+dayString;
+        if (day < 10) dayString = "0" + day.ToString();*/
+        
+        return birthDay;
     }
     
     private string GetId()
@@ -137,5 +154,11 @@ public class EntrantGenerator : MonoBehaviour
     {
         Array entrantTypes = Enum.GetValues(typeof(EntrantManager.EntrantType));
         return (EntrantManager.EntrantType) entrantTypes.GetValue(random.Next(1,Enum.GetValues(typeof(EntrantManager.EntrantType)).Length));
+    }
+
+    private string GetRandomIssuingCity(EntrantManager.Country country)
+    {
+        string[] issuingCities = EntrantManager.IssuingCities[country];
+        return (string) issuingCities.GetValue(random.Next(issuingCities.Length));
     }
 }
