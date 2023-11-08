@@ -3,7 +3,14 @@ guid: 254a3f25aa4f92549a3ed0348ead4583
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - passportPrefab: {instanceID: 0}
+  - entrantBody: {instanceID: 0}
+  - surNamesTextAsset: {fileID: 4900000, guid: 2d0a72f3cbc7c484d9a0ebefda3d6b4a, type: 3}
+  - firstNameMaleTextAsset: {fileID: 4900000, guid: 8cb050bc4235ce746bcf7d6ddad98263,
+      type: 3}
+  - firstNameFemaleTextAsset: {fileID: 4900000, guid: 5e15f90cfc12a4743a685c6a471eae7d,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

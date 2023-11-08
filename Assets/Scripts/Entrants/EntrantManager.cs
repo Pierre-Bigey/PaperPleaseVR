@@ -26,6 +26,30 @@ namespace Entrants
         private static Random random;
         public enum Sex {Male, Female};
 
+        public enum EntrantType
+        {
+            CITIZEN,
+            IMMIGRANT,
+            TRANSIENT,
+            TOURIST,
+            WORKER,
+            ASYLUM_SEEKER,
+            DIPLOMAT,
+            JOURNALIST
+        }
+
+        public enum Country
+        {
+            ANTEGRIA,
+            ARSTOTKKA,
+            IMPOR,
+            KOLECHIA,
+            OBRISTAN,
+            REPUBLIA,
+            UNITED_FEDERATION,
+        }
+
+
         public static double incorrectRate = 0.45;
 
         protected static int EntrantCount;
@@ -40,14 +64,18 @@ namespace Entrants
             [SerializeField] internal string issuingCity;
             [SerializeField] internal string iD;
             [SerializeField] internal Sex sex;
+            [SerializeField] internal Country origin;
+            [SerializeField] internal EntrantType type;
+            
             
             internal bool isCorrect = true;
             private List<Document> documentsList;
             
             [SerializeField] internal PassportData passport;
+            [SerializeField] internal EntryPermit entryPermit;
             [SerializeField] internal WorkPassData workPass;
 
-            public EntrantData(string surName, string firstName, string iD, Sex sex, string dateOfBirth, string issuingCity)
+            public EntrantData(string surName, string firstName, string iD, Sex sex, string dateOfBirth, string issuingCity, Country origin, EntrantType type)
             {
                 if (random == null)
                 {
@@ -63,6 +91,8 @@ namespace Entrants
                 this.issuingCity = issuingCity;
                 this.iD = iD;
                 this.sex = sex;
+                this.origin = origin;
+                this.type = type;
                 
                 passport =  new PassportData(this, DateTime.Today.ToString(new CultureInfo("ja-JP")));
                 workPass = new WorkPassData(this, DateTime.Today.ToString(new CultureInfo("ja-JP")));
@@ -74,7 +104,7 @@ namespace Entrants
                 PassportData ps = this.passport;
                 string sexString = ps.sex.ToString();
                 //Return Name, EXP, ISS, SEX, DOB, ID 
-                return (ps.firstName + "," + ps.surName, ps.expirationDate, ps.issuingCity,  ps.sex.ToString()[0].ToString(),
+                return (ps.firstName + "," + ps.surName, ps.expirationDate, ps.issuingCity,  ps.sex.ToString(),
                     ps.dateOfBirth, ps.iD);
             }
             
@@ -114,6 +144,7 @@ namespace Entrants
             }
             
         }
+    
 
         public abstract class Document{}
         
@@ -186,7 +217,24 @@ namespace Entrants
             
         }
 
-
+        public class EntryPermit
+        {
+            [SerializeField] internal string surName;
+            [SerializeField] internal string firstName;
+            [SerializeField] internal string iD;
+            [SerializeField] public string purpose;
+            [SerializeField] public string duration;
+            [SerializeField] public string enterByDate;
+            public EntryPermit(EntrantData entrantData, string purpose,string duration,string enterByDate)
+            {
+                this.surName = entrantData.surName;
+                this.firstName = entrantData.firstName;
+                this.iD = entrantData.iD;
+                this.purpose = purpose;
+                this.duration = duration;
+                this.enterByDate = enterByDate;
+            }
+        }
 
 
 
@@ -209,9 +257,9 @@ namespace Entrants
 #endif
         }
         
-        public static void SaveEntrant(string surName, string firstName, string ID, Sex sex, string dateOfBirth, string issuingCity)
+        public static void SaveEntrant(string surName, string firstName, string ID, Sex sex, string dateOfBirth, string issuingCity, Country origin, EntrantType type)
         {
-            EntrantData entrantData = new EntrantData(surName, firstName, ID, sex,dateOfBirth, issuingCity);
+            EntrantData entrantData = new EntrantData(surName, firstName, ID, sex,dateOfBirth, issuingCity, origin, type);
             SaveEntrant(entrantData);
         }
         

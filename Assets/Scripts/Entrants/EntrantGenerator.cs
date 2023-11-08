@@ -59,14 +59,19 @@ public class EntrantGenerator : MonoBehaviour
     private EntrantManager.EntrantData GenerateEntrant()
     {
         string surName = getRandomName(surNamesTextAsset);
-        Array sexs = Enum.GetValues(typeof(EntrantManager.Sex));
-        EntrantManager.Sex sex  = (EntrantManager.Sex)sexs.GetValue(random.Next(Enum.GetValues(typeof(EntrantManager.Sex)).Length));
         string firstName;
+        EntrantManager.Sex sex = GetRandomSex();
         if(sex == EntrantManager.Sex.Male) firstName = getRandomName(firstNameMaleTextAsset);
         else firstName = getRandomName(firstNameFemaleTextAsset);
         string dateOfBirth = getRandomDateOfBirth();
         string id = GetId();
-        return new EntrantManager.EntrantData(surName, firstName, id, sex, dateOfBirth, "Paris");
+        EntrantManager.Country origin = GetRandomCountry();
+        EntrantManager.EntrantType type;
+        if (origin != EntrantManager.Country.ARSTOTKKA) type = EntrantManager.EntrantType.CITIZEN;
+        else type = GetRandomForeignerType();
+
+
+        return new EntrantManager.EntrantData(surName, firstName, id, sex, dateOfBirth, "Paris", origin, type);
     }
     
     
@@ -114,5 +119,23 @@ public class EntrantGenerator : MonoBehaviour
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return new string(Enumerable.Repeat(chars, 8)
             .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    private EntrantManager.Sex GetRandomSex()
+    {
+        Array sexs = Enum.GetValues(typeof(EntrantManager.Sex));
+        return (EntrantManager.Sex) sexs.GetValue(random.Next(Enum.GetValues(typeof(EntrantManager.Sex)).Length));
+    }
+    
+    private EntrantManager.Country GetRandomCountry()
+    {
+        Array countries = Enum.GetValues(typeof(EntrantManager.Country));
+        return (EntrantManager.Country) countries.GetValue(random.Next(Enum.GetValues(typeof(EntrantManager.Country)).Length));
+    }
+    
+    private EntrantManager.EntrantType GetRandomForeignerType()
+    {
+        Array entrantTypes = Enum.GetValues(typeof(EntrantManager.EntrantType));
+        return (EntrantManager.EntrantType) entrantTypes.GetValue(random.Next(1,Enum.GetValues(typeof(EntrantManager.EntrantType)).Length));
     }
 }
