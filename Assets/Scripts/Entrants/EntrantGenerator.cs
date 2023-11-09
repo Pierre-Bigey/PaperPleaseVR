@@ -71,9 +71,9 @@ public class EntrantGenerator : MonoBehaviour
 
     private EntrantManager.EntrantData GenerateEntrant()
     {
-        string surName = getRandomName(surNamesTextAsset);
-        string firstName;
         EntrantManager.Sex sex = GetRandomSex();
+        string surName = getRandomSurName(surNamesTextAsset,sex);
+        string firstName;
         if(sex == EntrantManager.Sex.Male) firstName = getRandomName(firstNameMaleTextAsset);
         else firstName = getRandomName(firstNameFemaleTextAsset);
         DateTime dateOfBirth = getRandomDateOfBirth();
@@ -107,28 +107,26 @@ public class EntrantGenerator : MonoBehaviour
         //List<string> nameList = getData("Assets/Ressources/"+fileName+".csv");
         return nameList[random.Next(nameList.Count)];
     }
+    
+    private string getRandomSurName(TextAsset textAsset, EntrantManager.Sex sex)
+    {
+        List<string> surname = getData(textAsset);
+        //List<string> nameList = getData("Assets/Ressources/"+fileName+".csv");
+        string name = surname[random.Next(surname.Count)];
+        if (name.Contains("/"))
+        {
+            string[] names = name.Split("/");
+            if (sex == EntrantManager.Sex.Male) return names[0];
+            return names[1];
+        }
+        return name;
+    }
 
     private DateTime getRandomDateOfBirth()
     {
         int age = random.Next(minAge, maxAge);
         int daySinceBirthday = random.Next(366);
         DateTime birthDay = GameManager.Instance.date.AddYears(-age).AddDays(-daySinceBirthday);
-        
-        /*var longMonth = new List<int> {1, 2, 5, 7, 8, 10, 12};
-        
-        int year = random.Next(1914, 1965);
-        int month = random.Next(1,13);
-        
-        int day;
-        if (month == 2)  day = random.Next(1,32);
-        else if (longMonth.Contains(month)) day = random.Next(1,30);
-        else day = random.Next(1,31);
-
-        string monthString = month.ToString();
-        if (month < 10) monthString = "0" + month.ToString();
-
-        string dayString = day.ToString();
-        if (day < 10) dayString = "0" + day.ToString();*/
         
         return birthDay;
     }

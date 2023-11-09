@@ -70,6 +70,20 @@ namespace Entrants
             REPUBLIA,
             UNITED_FEDERATION,
         }
+
+        public enum DocumentType
+        {
+            PASSPORT,
+            ENTRY_TICKET,
+            IDENTITY_CARD,
+            DIPLO_AUTH,
+            ENTRY_PERMIT,
+            ACCESS_PERMIT,
+            WORK_PASS,
+            GRANT_OF_ASYLUM,
+            ID_SUPPLEMENT,
+            CERTIF_OF_VACCINATION
+        }
         
         public static Dictionary<Country, string[]> IssuingCities = new()
         {
@@ -128,6 +142,7 @@ namespace Entrants
                 this.type = type;
                 
                 passport =  new PassportData(this);
+                Debug.Log("[EM] Type of passport is " + passport.GetType());
                 workPass = new WorkPassData(this);
                 entryPermit = new EntryPermit(this);
 
