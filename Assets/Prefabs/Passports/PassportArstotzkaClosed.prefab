@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1547230223701311885}
   - component: {fileID: 2858707769544352000}
   m_Layer: 0
-  m_Name: PassportArtotzkaClosed
+  m_Name: PassportArstotzkaClosed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

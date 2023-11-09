@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1417456972517285199}
   - component: {fileID: 3003918982442086753}
   m_Layer: 0
-  m_Name: PassportArtotzkaOpened
+  m_Name: PassportArstotzkaOpened
   m_TagString: Passport
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
