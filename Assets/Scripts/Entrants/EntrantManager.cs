@@ -84,6 +84,30 @@ namespace Entrants
             ID_SUPPLEMENT,
             CERTIF_OF_VACCINATION
         }
+
+        public enum InfoType
+        {
+            NAME,
+            DOB, 
+            PASS_ISS,
+            EXP_DATE,
+            PHOTO,
+            SEX,
+            ID,
+            DISTRICT,
+            ENTRYPURPOSE,
+            ACCESS_DURATION,
+            HEIGHT,
+            WEIGHT,
+            DESCRIPTION,
+            WORK_SEAL,
+            WORK_END_DATE,
+            ENTRY_DATE,
+            COUNTRY,
+            ALIAS,
+            COUNTRY_ACCESS,
+            VACCINE,
+        }
         
         public static Dictionary<Country, string[]> IssuingCities = new()
         {
@@ -258,6 +282,7 @@ namespace Entrants
             
         }
 
+        [System.Serializable]
         public class EntryPermit
         {
             [SerializeField] internal string surName;
@@ -297,17 +322,7 @@ namespace Entrants
                 this.enterByDate = GameManager.Instance.date.AddDays(daysLeft);
             }
         }
-
-
-
-
-
-
-
-
-
         
-
 
 
         public static void SaveEntrant(EntrantData entrantData)
@@ -337,6 +352,6 @@ namespace Entrants
 
             throw new Exception("File doesn't contain entrant with index " + index);
         }
-    
+        
     }
 }

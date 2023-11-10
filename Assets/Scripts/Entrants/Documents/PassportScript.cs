@@ -38,14 +38,14 @@ public class PassportScript : MonoBehaviour
     public void SetData((string, string, string, string, string, string) data)
     {
         EntrantManager.DocumentType docType = EntrantManager.DocumentType.PASSPORT;
-        nameButton.Initialize(docType,"name",data.Item1);
-        expButton.Initialize(docType,"exp",data.Item2);
-        issButton.Initialize(docType,"iss",data.Item3);
-        sexButton.Initialize(docType,"sex",data.Item4);
-        dobButton.Initialize(docType,"dob",data.Item5);
+        nameButton.Initialize(docType,EntrantManager.InfoType.NAME,data.Item1);
+        expButton.Initialize(docType,EntrantManager.InfoType.EXP_DATE,data.Item2);
+        issButton.Initialize(docType,EntrantManager.InfoType.PASS_ISS,data.Item3);
+        sexButton.Initialize(docType,EntrantManager.InfoType.SEX,data.Item4);
+        dobButton.Initialize(docType,EntrantManager.InfoType.DOB,data.Item5);
         string id = data.Item6;
         string id_ = id.Substring(0,4)+"-"+id.Substring(4);
-        idButton.Initialize(docType,"id",id_);
+        idButton.Initialize(docType,EntrantManager.InfoType.ID,id_);
     }
 
     public void SwitchIsOpened()
