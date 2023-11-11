@@ -71,11 +71,23 @@ namespace Entrants
             UNITED_FEDERATION,
         }
 
+        public enum District
+        {
+            ALTAN,
+            VESCILLO,
+            BURNTON,
+            OCTOVALIS,
+            GENNISTORA,
+            LENDIFORMA,
+            WOZENFIELD,
+            FARDESTO,
+        }
+
         public enum DocumentType
         {
             PASSPORT,
             ENTRY_TICKET,
-            IDENTITY_CARD,
+            ID_CARD,
             DIPLO_AUTH,
             ENTRY_PERMIT,
             ACCESS_PERMIT,
@@ -140,12 +152,18 @@ namespace Entrants
             [SerializeField] internal EntrantType type;
             
             
+            [SerializeField] internal int height;
+            [SerializeField] internal int weight;
+            
+            
             internal bool isCorrect = true;
             private List<Document> documentsList;
             
             [SerializeField] internal PassportData passport;
-            [SerializeField] internal EntryPermit entryPermit;
+            [SerializeField] internal EntryPermitData entryPermit;
             [SerializeField] internal WorkPassData workPass;
+            [SerializeField] internal EntryTicketData entryTicket;
+            [SerializeField] internal IDCardData idCard;
 
             public EntrantData(string surName, string firstName, string iD, Sex sex, DateTime dateOfBirth, string issuingCity, Country originCountry, EntrantType type)
             {
@@ -166,10 +184,18 @@ namespace Entrants
                 this.originCountry = originCountry;
                 this.type = type;
                 
+                this.height = 180;
+                this.weight = 70;
+                
+                
                 passport =  new PassportData(this);
                 Debug.Log("[EM] Type of passport is " + passport.GetType());
                 workPass = new WorkPassData(this);
-                entryPermit = new EntryPermit(this);
+                entryPermit = new EntryPermitData(this);
+                entryTicket = new EntryTicketData(this);
+                idCard = new IDCardData(this);
+
+                
 
             }
 
@@ -186,11 +212,26 @@ namespace Entrants
             //(string name, string id, string purpose, string duration, string entryByDate)
             public (string, string, string, string, string) GetEntryPermitData()
             {
-                EntryPermit ep = this.entryPermit;
+                EntryPermitData ep = this.entryPermit;
                 //Return Name, EXP, ISS, SEX, DOB, ID 
                 return (ep.firstName + ", " + ep.surName, ep.iD, ep.purpose.ToString(),  ep.duration,
                     ep.enterByDate.ToShortDateString());
             }
+
+            public string GetEntryTicketData()
+            {
+                return this.entryTicket.validOnDate.ToShortDateString();
+            }
+
+            //(string districtName, string name, string dob, string height, string weight)
+            public (string, string, string, string, string) GetIDCardData()
+            {
+                IDCardData idc = this.idCard;
+                return (idc.district.ToString(), idc.firstName + ", " + idc.surName,
+                    idc.dateOfBirth.ToShortDateString(), idc.height.ToString(), idc.weight.ToString());
+            }
+            
+            
             
             
             public string ToJSon()
@@ -237,11 +278,11 @@ namespace Entrants
         {
             [SerializeField] internal string surName;
             [SerializeField] internal string firstName;
-            [SerializeField] public DateTime dateOfBirth;
+            [SerializeField] internal DateTime dateOfBirth;
             [SerializeField] internal string iD;
-            [SerializeField] public Sex sex;
-            [SerializeField] public DateTime expirationDate;
-            [SerializeField] public string issuingCity;
+            [SerializeField] internal Sex sex;
+            [SerializeField] internal DateTime expirationDate;
+            [SerializeField] internal string issuingCity;
             public PassportData(EntrantData entrantData)
             {
                 this.surName = entrantData.surName;
@@ -261,10 +302,10 @@ namespace Entrants
         {
             
 
-            [SerializeField] public string surName;
-            [SerializeField] public string firstName;
-            [SerializeField] public WorkField field;
-            [SerializeField] public string expirationDate;
+            [SerializeField] internal string surName;
+            [SerializeField] internal string firstName;
+            [SerializeField] internal WorkField field;
+            [SerializeField] internal string expirationDate;
             
             public WorkPassData(EntrantData entrantData)
             {
@@ -284,15 +325,15 @@ namespace Entrants
         }
 
         [System.Serializable]
-        public class EntryPermit
+        public class EntryPermitData : Document
         {
             [SerializeField] internal string surName;
             [SerializeField] internal string firstName;
             [SerializeField] internal string iD;
-            [SerializeField] public EntrantType purpose;
-            [SerializeField] public string duration;
-            [SerializeField] public DateTime enterByDate;
-            public EntryPermit(EntrantData entrantData)
+            [SerializeField] internal EntrantType purpose;
+            [SerializeField] internal string duration;
+            [SerializeField] internal DateTime enterByDate;
+            public EntryPermitData(EntrantData entrantData)
             {
                 this.surName = entrantData.surName;
                 this.firstName = entrantData.firstName;
@@ -323,8 +364,41 @@ namespace Entrants
                 this.enterByDate = GameManager.Instance.date.AddDays(daysLeft);
             }
         }
-        
 
+
+        [System.Serializable]
+        public class EntryTicketData : Document
+        {
+            
+            [SerializeField] public DateTime validOnDate;
+
+            public EntryTicketData(EntrantData entrantData)
+            {
+                this.validOnDate = GameManager.Instance.date;
+            }
+        }
+
+        [System.Serializable]
+        public class IDCardData : Document
+        {
+            [SerializeField] internal District district;
+            [SerializeField] internal string surName;
+            [SerializeField] internal string firstName;
+            [SerializeField] internal DateTime dateOfBirth;
+            [SerializeField] internal int height;
+            [SerializeField] internal int weight;
+
+            public IDCardData(EntrantData entrantData)
+            {
+                Array districts = Enum.GetValues(typeof(District));
+                this.district = (District)districts.GetValue(random.Next(Enum.GetValues(typeof(District)).Length));
+                this.surName = entrantData.surName;
+                this.firstName = entrantData.firstName;
+                this.dateOfBirth = entrantData.dateOfBirth;
+                this.height = entrantData.height;
+                this.weight = entrantData.weight;
+            }
+        }
 
         public static void SaveEntrant(EntrantData entrantData)
         {

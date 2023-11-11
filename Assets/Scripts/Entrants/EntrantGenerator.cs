@@ -13,6 +13,7 @@ public class EntrantGenerator : MonoBehaviour
     [SerializeField] private GameObject passportPrefab;
     [SerializeField] private GameObject entryPermitPrefab;
     [SerializeField] private GameObject entryTicketPrefab;
+    [SerializeField] private GameObject IDCardPrefab;
     [SerializeField] private GameObject entrantBody;
 
     [SerializeField] private TextAsset surNamesTextAsset;
@@ -44,6 +45,7 @@ public class EntrantGenerator : MonoBehaviour
         SummonPassport(entrantData,new Vector3(0f,0,0));
         SummonEntryPermit(entrantData,new Vector3(0.2f,0,0));
         SummonEntryTicket(entrantData,new Vector3(-0.2f,0,0));
+        SummonIDCard(entrantData, new Vector3(0, 0, -0.1f));
         // SummonPassport(GenerateEntrant());
         // SummonPassport(GenerateEntrant());
         // SummonPassport(GenerateEntrant());
@@ -80,7 +82,15 @@ public class EntrantGenerator : MonoBehaviour
         GameObject entryTicket = Instantiate(entryTicketPrefab, transform);
         entryTicket.transform.position += offset;
         EntryTicketScript entryTicketScript = entryTicket.GetComponent<EntryTicketScript>();
-        entryTicketScript.SetData(GameManager.Instance.date.ToShortDateString());
+        entryTicketScript.SetData(entrantData.GetEntryTicketData());
+    }
+
+    private void SummonIDCard(EntrantManager.EntrantData entrantData, Vector3 offset)
+    {
+        GameObject idCard = Instantiate(IDCardPrefab, transform);
+        idCard.transform.position += offset;
+        IDCardScript idCardScript = idCard.GetComponent<IDCardScript>();
+        idCardScript.SetData(entrantData.GetIDCardData());
     }
 
     private EntrantManager.EntrantData GenerateEntrant()
