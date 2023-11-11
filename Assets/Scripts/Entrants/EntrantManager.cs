@@ -189,7 +189,7 @@ namespace Entrants
                 
                 
                 passport =  new PassportData(this);
-                Debug.Log("[EM] Type of passport is " + passport.GetType());
+                
                 workPass = new WorkPassData(this);
                 entryPermit = new EntryPermitData(this);
                 entryTicket = new EntryTicketData(this);

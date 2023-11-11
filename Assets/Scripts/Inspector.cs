@@ -22,6 +22,8 @@ public class Inspector : MonoBehaviour
     private DocumentButton dButton0;
     private DocumentButton dButton1;
 
+    private bool isProcessing = false;
+
 
     private void Awake()
     {
@@ -33,46 +35,57 @@ public class Inspector : MonoBehaviour
             DontDestroyOnLoad(this);
         }
 
+        dButton0 = null;
+        dButton1 = null;
+        
         DocumentButton.ResetNumberOfButton();
     }
 
     public void ButtonPressed(DocumentButton dButton)
     {
         Debug.Log("You have clicked on dButton n" + dButton.index + " member of " + dButton.documentType.ToString() +
-                  " which contains a " + dButton.information.ToString() + " of value " + dButton.value);
-        ProcessDButton(dButton);
+                  " which contains a " + dButton.information.ToString() + " of value " + dButton.displayedValue);
+        if (!isProcessing) ProcessDButton(dButton);
     }
 
     private void ProcessDButton(DocumentButton dButton)
     {
+        if(dButton1) Debug.Log("ERROR, there is a dButton1 in processButton... Index = "+dButton1.index);
         if (dButton0) //If a button is already selected
         {
+            Debug.Log("Inspector There is already a button selected : "+dButton0.index);
             //We first check if the button clicked is already selected
             if (dButton0.index == dButton.index)
             {
+                Debug.Log("Inspector The button pressed is the same, we disable it");
                 ResetInternalButton(0);
             }
             //If not, check if it's the same document
             else if (dButton0.documentType == dButton.documentType) 
             {
+                Debug.Log("Inspector This is a button from the same document");
                 SetButton0(dButton); //We change the button
             }
             //If not check if it is the same type of information
             else if ( dButton0.information != dButton.information)
             {
-                IncoherentButton(dButton0); //if not it's incoherent
+                Debug.Log("Inspector Buttons selected aren't of the same type");
+                IncoherentButton(dButton); //if not it's incoherent
             }
-            else if (dButton0.value.Equals(dButton.value))
+            else if (dButton0.displayedValue.Equals(dButton.displayedValue))
             {
+                Debug.Log("Inspector The buttons share the same information");
                 CorrectButton(dButton);
             }
             else
             {
+                Debug.Log("Inspector There is a discrepancy !!!");
                 DiscrepancyButton(dButton);
             }
         }
         else
         {
+            Debug.Log("Inspector This is the first button pressed");
             SetButton0(dButton);
         }
     }
@@ -80,28 +93,33 @@ public class Inspector : MonoBehaviour
     private void IncoherentButton(DocumentButton dButton)
     {
         dButton1 = dButton;
-        StartCoroutine(BlinkButtons(incoherentColor));
+        StartCoroutine(ColorButtons(incoherentColor));
     }
 
     private void CorrectButton(DocumentButton dButton)
     {
         dButton1 = dButton;
-        StartCoroutine(BlinkButtons(correctColor));
+        StartCoroutine(ColorButtons(correctColor));
     }
 
     private void DiscrepancyButton(DocumentButton dButton)
     {
         dButton1 = dButton;
-        StartCoroutine(BlinkButtons(discrepancyColor));
+        StartCoroutine(ColorButtons(discrepancyColor));
     }
 
-    private IEnumerator BlinkButtons(Color color)
+    private IEnumerator ColorButtons(Color color)
     {
+        isProcessing = true;
+        Debug.Log("ColorButton Called to color : \nbutton 0 : "+dButton0.index+"\nbutton 1 : "+dButton1.index);
+        
         dButton0.SetBackgroundColor(color);
         dButton1.SetBackgroundColor(color);
         yield return new WaitForSeconds(checkingDelay);
         ResetInternalButton(0);
         ResetInternalButton(1);
+        Debug.Log("ColorButton Color Finished");
+        isProcessing = false;
     }
 
     private void SetButton0(DocumentButton dButton)
