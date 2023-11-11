@@ -5,12 +5,14 @@ using Entrants;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using Random = System.Random;
 
 public class EntrantGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject passportPrefab;
     [SerializeField] private GameObject entryPermitPrefab;
+    [SerializeField] private GameObject entryTicketPrefab;
     [SerializeField] private GameObject entrantBody;
 
     [SerializeField] private TextAsset surNamesTextAsset;
@@ -39,8 +41,9 @@ public class EntrantGenerator : MonoBehaviour
         //EntrantManager.EntrantData entrantData1 = EntrantManager.LoadEntrant(1);
         //for(int i = 0; i<10;i++) Debug.Log(getRandomDateOfBirth());
         EntrantManager.EntrantData entrantData = GenerateEntrant();
-        SummonPassport(entrantData);
-        SummonEntryPermit(entrantData);
+        SummonPassport(entrantData,new Vector3(0f,0,0));
+        SummonEntryPermit(entrantData,new Vector3(0.2f,0,0));
+        SummonEntryTicket(entrantData,new Vector3(-0.2f,0,0));
         // SummonPassport(GenerateEntrant());
         // SummonPassport(GenerateEntrant());
         // SummonPassport(GenerateEntrant());
@@ -52,21 +55,32 @@ public class EntrantGenerator : MonoBehaviour
         GameObject entrant = Instantiate(entrantBody);
         EntrantManager.EntrantData entrantData = EntrantManager.LoadEntrant(index);
         entrantDict.Add(entrant,entrantData);
-        SummonPassport(entrantData);
+        // SummonPassport(entrantData);
     }
 
-    private void SummonPassport(EntrantManager.EntrantData entrantData)
+    private void SummonPassport(EntrantManager.EntrantData entrantData, Vector3 offset)
     {
         GameObject passport = Instantiate(passportPrefab,transform);
+        passport.transform.position += offset;
         PassportScript passScript = passport.GetComponent<PassportScript>();
         passScript.SetData(entrantData.GetPassportData());
     }
 
-    private void SummonEntryPermit(EntrantManager.EntrantData entrantData)
+    private void SummonEntryPermit(EntrantManager.EntrantData entrantData, Vector3 offset)
     {
+        
         GameObject entryPermit = Instantiate(entryPermitPrefab, transform);
+        entryPermit.transform.position += offset;
         EntryPermitScript entryPermitScript = entryPermit.GetComponent<EntryPermitScript>();
         entryPermitScript.SetData(entrantData.GetEntryPermitData());
+    }
+
+    private void SummonEntryTicket(EntrantManager.EntrantData entrantData, Vector3 offset)
+    {
+        GameObject entryTicket = Instantiate(entryTicketPrefab, transform);
+        entryTicket.transform.position += offset;
+        EntryTicketScript entryTicketScript = entryTicket.GetComponent<EntryTicketScript>();
+        entryTicketScript.SetData(GameManager.Instance.date.ToShortDateString());
     }
 
     private EntrantManager.EntrantData GenerateEntrant()

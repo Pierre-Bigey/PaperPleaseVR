@@ -24,7 +24,7 @@ public class EntryPermitScript : MonoBehaviour
         idButton.Initialize(docType,EntrantManager.InfoType.ID,data.Item2);
         purposeButton.Initialize(docType,EntrantManager.InfoType.ENTRYPURPOSE,data.Item3); //Useless...
         durationButton.Initialize(docType,EntrantManager.InfoType.ACCESS_DURATION,data.Item4);
-        enterByDateButton.Initialize(docType,EntrantManager.InfoType.ENTRY_DATE,data.Item5);
+        enterByDateButton.Initialize(docType,EntrantManager.InfoType.ENTER_BY_DATE,data.Item5);
     }
 
 }
