@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Entrants;
@@ -11,10 +12,10 @@ public class EntryTicketScript : MonoBehaviour
 
 
     //(string name, string id, string purpose, string duration, string enterByDate)
-    public void SetData(string data)
+    public void SetData(DateTime data)
     {
         EntrantManager.DocumentType docType = EntrantManager.DocumentType.ENTRY_TICKET;
-        ValidOnDateButton.Initialize(docType,EntrantManager.InfoType.VALID_ON_DATE, data);
+        ValidOnDateButton.Initialize(docType,EntrantManager.InfoType.VALID_ON_DATE, data.ToString("yyyy.MM.dd"));
     }
 
 }

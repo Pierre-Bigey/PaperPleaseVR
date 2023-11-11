@@ -15,15 +15,15 @@ public class IDCardScript : MonoBehaviour
     [SerializeField] private DocumentButton weightButton;
     [SerializeField] private DocumentButton photoButton;
 
-    //(string districtName, string name, string dob, string height, string weight)
-    public void SetData((string, string, string, string, string) data)
+    //(District districtName, string name, DateTime dob, int height, int weight)
+    public void SetData((EntrantManager.District, string, DateTime, int, int) data)
     {
         EntrantManager.DocumentType docType = EntrantManager.DocumentType.ID_CARD;
-        districtButton.Initialize(docType, EntrantManager.InfoType.DISTRICT,data.Item1+" DISTRICT");
+        districtButton.Initialize(docType, EntrantManager.InfoType.DISTRICT,data.Item1.ToString()+" DISTRICT");
         nameButton.Initialize(docType, EntrantManager.InfoType.NAME,data.Item2);
-        dobButton.Initialize(docType, EntrantManager.InfoType.DOB,data.Item3);
-        heightButton.Initialize(docType, EntrantManager.InfoType.HEIGHT,data.Item4+"cm");
-        weightButton.Initialize(docType, EntrantManager.InfoType.WEIGHT,data.Item5+"Kg");
+        dobButton.Initialize(docType, EntrantManager.InfoType.DOB,data.Item3.ToString("yyyy.MM.dd"));
+        heightButton.Initialize(docType, EntrantManager.InfoType.HEIGHT,data.Item4.ToString()+"cm");
+        weightButton.Initialize(docType, EntrantManager.InfoType.WEIGHT,data.Item5.ToString()+"Kg");
     }
 
 }

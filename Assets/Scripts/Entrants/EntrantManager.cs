@@ -199,36 +199,36 @@ namespace Entrants
 
             }
 
-            //(string name, string exp, string iss, string sex, string dob, string id)
-            public (string, string, string, string, string, string) GetPassportData()
+            //(string name, DateTime exp, string iss, Sex sex, DateTime dob, string id)
+            public (string, DateTime, string, Sex, DateTime, string) GetPassportData()
             {
                 PassportData ps = this.passport;
                 string sexString = ps.sex.ToString();
                 //Return Name, EXP, ISS, SEX, DOB, ID 
-                return (ps.firstName + ", " + ps.surName, ps.expirationDate.ToShortDateString(), ps.issuingCity,  ps.sex.ToString()[0].ToString(),
-                    ps.dateOfBirth.ToShortDateString(), ps.iD);
+                return (ps.firstName + ", " + ps.surName, ps.expirationDate, ps.issuingCity,  ps.sex,
+                    ps.dateOfBirth, ps.iD);
             }
             
-            //(string name, string id, string purpose, string duration, string entryByDate)
-            public (string, string, string, string, string) GetEntryPermitData()
+            //(string name, string id, EntrantType purpose, string duration, DateTime entryByDate)
+            public (string, string, EntrantType, string, DateTime) GetEntryPermitData()
             {
                 EntryPermitData ep = this.entryPermit;
                 //Return Name, EXP, ISS, SEX, DOB, ID 
-                return (ep.firstName + ", " + ep.surName, ep.iD, ep.purpose.ToString(),  ep.duration,
-                    ep.enterByDate.ToShortDateString());
+                return (ep.firstName + ", " + ep.surName, ep.iD, ep.purpose,  ep.duration,
+                    ep.enterByDate);
             }
 
-            public string GetEntryTicketData()
+            public DateTime GetEntryTicketData()
             {
-                return this.entryTicket.validOnDate.ToShortDateString();
+                return this.entryTicket.validOnDate;
             }
 
-            //(string districtName, string name, string dob, string height, string weight)
-            public (string, string, string, string, string) GetIDCardData()
+            //(District districtName, string name, DateTime dob, int height, int weight)
+            public (District, string, DateTime, int, int) GetIDCardData()
             {
                 IDCardData idc = this.idCard;
-                return (idc.district.ToString(), idc.firstName + ", " + idc.surName,
-                    idc.dateOfBirth.ToShortDateString(), idc.height.ToString(), idc.weight.ToString());
+                return (idc.district, idc.firstName + ", " + idc.surName,
+                    idc.dateOfBirth, idc.height, idc.weight);
             }
             
             

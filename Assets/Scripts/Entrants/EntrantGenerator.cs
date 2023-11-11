@@ -35,21 +35,11 @@ public class EntrantGenerator : MonoBehaviour
 
     private void Start()
     {
-        
-        //EntrantManager.SaveEntrant("Bigey","Pierre","45df78gh", EntrantManager.Sex.Male);
-        //EntrantManager.EntrantData entrantData = EntrantManager.LoadEntrant(0);
-        //Debug.Log(entrantData.ToJSon());
-        //EntrantManager.EntrantData entrantData1 = EntrantManager.LoadEntrant(1);
-        //for(int i = 0; i<10;i++) Debug.Log(getRandomDateOfBirth());
         EntrantManager.EntrantData entrantData = GenerateEntrant();
         SummonPassport(entrantData,new Vector3(0f,0,0));
         SummonEntryPermit(entrantData,new Vector3(0.2f,0,0));
         SummonEntryTicket(entrantData,new Vector3(-0.2f,0,0));
         SummonIDCard(entrantData, new Vector3(0, 0, -0.1f));
-        // SummonPassport(GenerateEntrant());
-        // SummonPassport(GenerateEntrant());
-        // SummonPassport(GenerateEntrant());
-        //SummonEntrant(0);
     }
 
     private void SummonEntrant(int index)
