@@ -29,6 +29,8 @@ public class CalendarController : MonoBehaviour
         NovemberMonth = transform.Find("November").gameObject;
         DecemberMonth = transform.Find("December").gameObject;
         RedCircle = transform.Find("RedCircle").gameObject;
+
+        
     }
 
     public void UpdateCalendar()
@@ -50,6 +52,9 @@ public class CalendarController : MonoBehaviour
         else throw new Exception("Invalid month");
 
         RedCircle.transform.localPosition = GetCirclePosition(day, month);
+        
+        CalendarScript CS = GetComponent<CalendarScript>();
+        CS.SetData(GameManager.Instance.date);
     }
     
     private Vector3 GetCirclePosition(int day, int month)

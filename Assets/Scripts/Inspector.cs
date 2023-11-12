@@ -61,32 +61,48 @@ public class Inspector : MonoBehaviour
                 Debug.Log("Inspector The button pressed is the same, we disable it");
                 ResetInternalButton(0);
             }
-            //If not, check if it's the same document
+            //If buttons are differents, check if it's the same document
             else if (dButton0.documentType == dButton.documentType) 
             {
                 Debug.Log("Inspector This is a button from the same document");
                 SetButton0(dButton); //We change the button
             }
-            //If not check if it is the same type of information
-            else if ( dButton0.information != dButton.information)
+            //If the documents aren't the same, check if it is the same type of information
+            else 
             {
-                Debug.Log("Inspector Buttons selected aren't of the same type");
-                dButton1 = dButton;
-                IncoherentButton(); //if not it's incoherent
-            }
-            else
-            {
-                Debug.Log("Inspector The buttons share the same type of information, we are going to process them");
+                //The button 1 is initialized
                 dButton1 = dButton;
                 
-                if (CompareButtons())
+                //Check if the calendar is clicked
+                if (dButton0.information == EntrantManager.InfoType.CALENDAR_DATE)
                 {
-                    CorrectButton();
+                    CompareCalendar(1);
                 }
-                else
+                else if (dButton1.information == EntrantManager.InfoType.CALENDAR_DATE)
                 {
-                    DiscrepancyButton();
+                    CompareCalendar(0);
                 }
+                
+                //Check if they share the same information
+                else if (dButton0.information != dButton.information)
+                {
+                    Debug.Log("Inspector Buttons selected aren't of the same type");
+                    IncoherentButton();
+                }
+                else //IF not we compare them
+                {
+                    Debug.Log("Inspector The buttons share the same type of information, we are going to process them");
+                    
+                    if (CompareButtons())
+                    {
+                        CorrectButton();
+                    }
+                    else
+                    {
+                        DiscrepancyButton();
+                    }
+                }
+            
             }
         }
         else
@@ -97,46 +113,60 @@ public class Inspector : MonoBehaviour
     }
 
 
-    private bool CompareCalendar(int dButtonCalendar)
+    private void CompareCalendar(int buttonNumero)
     {
-        DocumentButton calendarButton = dButton0;
-        if (dButtonCalendar == 1) calendarButton = dButton1;
+        DocumentButton buttonToCheck = dButton0;
+        if (buttonNumero == 1) buttonToCheck = dButton1;
+
+        int difference;
         
-        switch (dButton0.information)
+        
+        try
         {
-            
+            DateTime buttonDate = DateTime.ParseExact(buttonToCheck.displayedValue, EntrantManager.dateFormat[buttonToCheck.documentType], null);
+            difference = DateTime.Compare(GameManager.Instance.date, buttonDate);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Calendar Comparison, exception = "+e);
+            IncoherentButton();
+            return;
+        }
+
+        bool isCorrect = false;
+        
+        switch (buttonToCheck.information)
+        {
             case EntrantManager.InfoType.DOB:
-                DateTime dob0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
-                DateTime dob1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
-                return dob0.Equals(dob1);
-            
+                isCorrect = difference > 0;
+                break;
             
             case EntrantManager.InfoType.EXP_DATE:
-                DateTime exp0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
-                DateTime exp1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
-                
-                //Calendar comparison
-                return true;
-            
-            
-            case EntrantManager.InfoType.ACCESS_DURATION:
-                //Comparison with Purpose
-                return true;
-            
-            case EntrantManager.InfoType.WORK_END_DATE:
-                //Comparison with acces duration and date
-                return true;
+                isCorrect = difference<0;
+                break;
             
             case EntrantManager.InfoType.ENTER_BY_DATE:
                 //Comparison with calendar
-                return true;
+                isCorrect = difference<0;
+                break;
             
             case EntrantManager.InfoType.VALID_ON_DATE:
                 //Comparison with calendar
-                return true;
+                isCorrect = difference == 0;
+                break;
             
             default:
-                return true;
+                isCorrect = false;
+                break;
+        }
+        
+        if (isCorrect)
+        {
+            CorrectButton();
+        }
+        else
+        {
+            DiscrepancyButton();
         }
     }
 
