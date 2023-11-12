@@ -26,11 +26,13 @@ public class GameManager : MonoBehaviour
         //date initialization
         
         date = new DateTime(1982, 11, 23);
+        CalendarController.Instance.UpdateCalendar();
     }
 
     public void AddDay()
     {
         date = date.AddDays(1);
+        CalendarController.Instance.UpdateCalendar();
     }
     
 }

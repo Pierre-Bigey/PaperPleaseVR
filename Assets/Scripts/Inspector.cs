@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Entrants;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -70,17 +71,22 @@ public class Inspector : MonoBehaviour
             else if ( dButton0.information != dButton.information)
             {
                 Debug.Log("Inspector Buttons selected aren't of the same type");
-                IncoherentButton(dButton); //if not it's incoherent
-            }
-            else if (dButton0.displayedValue.Equals(dButton.displayedValue))
-            {
-                Debug.Log("Inspector The buttons share the same information");
-                CorrectButton(dButton);
+                dButton1 = dButton;
+                IncoherentButton(); //if not it's incoherent
             }
             else
             {
-                Debug.Log("Inspector There is a discrepancy !!!");
-                DiscrepancyButton(dButton);
+                Debug.Log("Inspector The buttons share the same type of information, we are going to process them");
+                dButton1 = dButton;
+                
+                if (CompareButtons())
+                {
+                    CorrectButton();
+                }
+                else
+                {
+                    DiscrepancyButton();
+                }
             }
         }
         else
@@ -90,21 +96,158 @@ public class Inspector : MonoBehaviour
         }
     }
 
-    private void IncoherentButton(DocumentButton dButton)
+
+    private bool CompareCalendar(int dButtonCalendar)
     {
-        dButton1 = dButton;
+        DocumentButton calendarButton = dButton0;
+        if (dButtonCalendar == 1) calendarButton = dButton1;
+        
+        switch (dButton0.information)
+        {
+            
+            case EntrantManager.InfoType.DOB:
+                DateTime dob0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
+                DateTime dob1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
+                return dob0.Equals(dob1);
+            
+            
+            case EntrantManager.InfoType.EXP_DATE:
+                DateTime exp0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
+                DateTime exp1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
+                
+                //Calendar comparison
+                return true;
+            
+            
+            case EntrantManager.InfoType.ACCESS_DURATION:
+                //Comparison with Purpose
+                return true;
+            
+            case EntrantManager.InfoType.WORK_END_DATE:
+                //Comparison with acces duration and date
+                return true;
+            
+            case EntrantManager.InfoType.ENTER_BY_DATE:
+                //Comparison with calendar
+                return true;
+            
+            case EntrantManager.InfoType.VALID_ON_DATE:
+                //Comparison with calendar
+                return true;
+            
+            default:
+                return true;
+        }
+    }
+
+    private bool CompareButtons()
+    {
+        switch (dButton0.information)
+        {
+            case EntrantManager.InfoType.NAME:
+                //String =
+                return dButton0.displayedValue.Equals(dButton1.displayedValue);
+            
+            case EntrantManager.InfoType.DOB:
+                DateTime dob0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
+                DateTime dob1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
+                return dob0.Equals(dob1);
+            
+            case EntrantManager.InfoType.PASS_ISS:
+                //Rule book comparison
+                return true;
+            
+            case EntrantManager.InfoType.EXP_DATE:
+                DateTime exp0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
+                DateTime exp1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
+                
+                //Calendar comparison
+                return true;
+            
+            case EntrantManager.InfoType.PHOTO:
+                //EntrantBody Comparison
+                return true;
+            
+            case EntrantManager.InfoType.SEX:
+                //Comparison with name
+                return true;
+            
+            case EntrantManager.InfoType.ID:
+                //String =
+                return dButton0.displayedValue.Equals(dButton1.displayedValue);
+            
+            case EntrantManager.InfoType.DISTRICT:
+                //RuleBook Comparison
+                return true;
+            
+            case EntrantManager.InfoType.ENTRYPURPOSE:
+                //Doesn't exist
+                return true;
+            
+            case EntrantManager.InfoType.ACCESS_DURATION:
+                //Comparison with Purpose
+                return true;
+            
+            case EntrantManager.InfoType.HEIGHT:
+                //Comparison with entrantBody
+                return true;
+            
+            case EntrantManager.InfoType.WEIGHT:
+                //Comparison with entrantBody
+                return true;
+            
+            case EntrantManager.InfoType.DESCRIPTION:
+                //Comparison with entrantBody
+                return true;
+            
+            case EntrantManager.InfoType.WORK_SEAL:
+                //Comparison with RuleBook
+                return true;
+            
+            case EntrantManager.InfoType.WORK_END_DATE:
+                //Comparison with acces duration and date
+                return true;
+            
+            case EntrantManager.InfoType.ENTER_BY_DATE:
+                //Comparison with calendar
+                return true;
+            
+            case EntrantManager.InfoType.VALID_ON_DATE:
+                //Comparison with calendar
+                return true;
+            
+            case EntrantManager.InfoType.COUNTRY:
+                return true;
+            
+            case EntrantManager.InfoType.ALIAS:
+                //Comparison with discourt/Audio transcript
+                return true;
+            
+            case EntrantManager.InfoType.COUNTRY_ACCESS:
+                //Comparison with ruleBook
+                return true;
+            
+            case EntrantManager.InfoType.VACCINE:
+                //Comparison with RuleBook
+                return true;
+            
+            default:
+                return true;
+        }
+    }
+
+    private void IncoherentButton()
+    {
         StartCoroutine(ColorButtons(incoherentColor));
     }
 
-    private void CorrectButton(DocumentButton dButton)
+    private void CorrectButton()
     {
-        dButton1 = dButton;
         StartCoroutine(ColorButtons(correctColor));
     }
 
-    private void DiscrepancyButton(DocumentButton dButton)
+    private void DiscrepancyButton()
     {
-        dButton1 = dButton;
         StartCoroutine(ColorButtons(discrepancyColor));
     }
 

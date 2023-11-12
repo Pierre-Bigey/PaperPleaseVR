@@ -94,7 +94,8 @@ namespace Entrants
             WORK_PASS,
             GRANT_OF_ASYLUM,
             ID_SUPPLEMENT,
-            CERTIF_OF_VACCINATION
+            CERTIF_OF_VACCINATION,
+            CALENDAR,
         }
 
         public enum InfoType
@@ -120,6 +121,7 @@ namespace Entrants
             ALIAS,
             COUNTRY_ACCESS,
             VACCINE,
+            CALENDAR_DATE,
         }
         
         public static Dictionary<Country, string[]> IssuingCities = new()
@@ -131,6 +133,18 @@ namespace Entrants
             {Country.OBRISTAN, new string[] {"Skal", "Lorndaz", "Mergerous"} },
             {Country.REPUBLIA, new string[] {"True Glorian", "Lesrenadi", "Bostan"} },
             {Country.UNITED_FEDERATION, new string[] {"Great Rapid", "Shingleton", "Korista City"} },
+        };
+
+        public static Dictionary<DocumentType, string> dateFormat = new()
+        {
+            { DocumentType.PASSPORT, "dd.MM.yyyy" },
+            { DocumentType.ID_SUPPLEMENT, "dd.MM.yyyy" },
+            { DocumentType.ACCESS_PERMIT, "dd.MM.yyyy" },
+            { DocumentType.GRANT_OF_ASYLUM, "dd.MM.yyyy" },
+            { DocumentType.ENTRY_PERMIT, "yyyy.MM.dd" },
+            { DocumentType.ID_CARD, "yyyy.MM.dd" },
+            { DocumentType.ENTRY_TICKET, "yyyy.MM.dd" },
+            { DocumentType.CERTIF_OF_VACCINATION, "dd.MM.yy" },
         };
 
 
