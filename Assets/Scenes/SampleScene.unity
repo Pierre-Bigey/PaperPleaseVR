@@ -1838,6 +1838,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerModel
       objectReference: {fileID: 0}
+    - target: {fileID: 2890791785502411894, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3020193373929418775, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367356127132117976, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3917666856905707533, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4574601690323715532, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4936965855869420004, guid: b8dc1b82a38291741a4d5271723bef0b,
         type: 3}
       propertyPath: m_PhysicsLayerMask.m_Bits
@@ -1866,7 +1891,7 @@ PrefabInstance:
     - target: {fileID: 5061934595927655024, guid: b8dc1b82a38291741a4d5271723bef0b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.307
       objectReference: {fileID: 0}
     - target: {fileID: 5061934595927655024, guid: b8dc1b82a38291741a4d5271723bef0b,
         type: 3}
@@ -1923,6 +1948,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7577258088413731034, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8685142622497350603, guid: b8dc1b82a38291741a4d5271723bef0b,
         type: 3}
       propertyPath: m_UseForceGrab
@@ -1967,6 +1997,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
       value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 9008561928500834859, guid: b8dc1b82a38291741a4d5271723bef0b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8dc1b82a38291741a4d5271723bef0b, type: 3}

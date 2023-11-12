@@ -2237,6 +2237,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "RulesBook",
+            "id": "f80c8333-363b-4bfd-9a06-0662eea3568f",
+            "actions": [
+                {
+                    "name": "TurnBookPage",
+                    "type": "Value",
+                    "id": "dc10381a-cb04-4bed-b303-cba2fd85d87d",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1c1f31ca-e315-4d2c-a4b6-1e42c67e494b",
+                    "path": "<XRController>{LeftHand}/{Primary2DAxis}",
+                    "interactions": "Sector(directions=12,sweepBehavior=1)",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "TurnBookPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c898bd5-df20-4429-92ad-1640e423e189",
+                    "path": "<XRController>{RightHand}/{Primary2DAxis}",
+                    "interactions": "Sector(directions=12,sweepBehavior=1)",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "TurnBookPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 3e443508096f0e9498cbf2a471903b9c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - JoystickAction: {fileID: -1230521249683556467, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
