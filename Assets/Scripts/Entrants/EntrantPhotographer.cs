@@ -3,28 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EntrantPhotographer : MonoBehaviour
 {
-    [SerializeField] private GameObject entrantBody;
-    [SerializeField] private bool summon;
+    [FormerlySerializedAs("entrantBody")] [SerializeField] private GameObject defaultEntrantBody;
+    [FormerlySerializedAs("summon")] [SerializeField] private bool Test;
     [SerializeField] private Camera entrantCamera;
     [SerializeField] private RenderTexture _renderTexture;
-    [SerializeField] private Material destination;
     private GameObject entrant;
    
 
     // Update is called once per frame
     void Update()
     {
-        if (summon)
+        if (Test)
         {
-            
-            summon = false;
-            entrant = Instantiate(entrantBody, transform);
-            entrant.SetLayerRecursively(11);
-            entrantCamera.gameObject.SetActive(true);
+            Test = false;
+            PhotoEntrant(defaultEntrantBody);
         }
+    }
+
+    public void PhotoEntrant(GameObject entrantBody)
+    {
+        entrant = Instantiate(entrantBody, transform);
+        entrant.SetLayerRecursively(11);
+        entrantCamera.gameObject.SetActive(true);
     }
 
     private void LateUpdate()
@@ -40,27 +44,4 @@ public class EntrantPhotographer : MonoBehaviour
         }
     }
     
-    /*void Update()
-    {
-        if (summon)
-        {
-            
-            summon = false;
-            GameObject entrant = Instantiate(entrantBody, transform);
-            entrant.SetLayerRecursively(11);
-            StartCoroutine(Snapshot());
-        }
-    }
-
-    private IEnumerator Snapshot()
-    {
-        yield return new WaitForSeconds(1);
-        entrantCamera.gameObject.SetActive(true);
-        Texture2D snapshot = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RG32, false);
-        entrantCamera.Render();
-        RenderTexture.active = entrantCamera.targetTexture;
-        snapshot.ReadPixels(new Rect(0,0,_renderTexture.width,_renderTexture.height),0,0);
-        entrantCamera.gameObject.SetActive(false);
-        
-    }*/
 }

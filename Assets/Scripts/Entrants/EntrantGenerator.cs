@@ -10,19 +10,26 @@ using Random = System.Random;
 
 public class EntrantGenerator : MonoBehaviour
 {
+    [Header("Documents Prefabs")]
     [SerializeField] private GameObject passportPrefab;
     [SerializeField] private GameObject entryPermitPrefab;
     [SerializeField] private GameObject entryTicketPrefab;
     [SerializeField] private GameObject IDCardPrefab;
     [SerializeField] private GameObject entrantBody;
 
+    [Header("TextsAssets")]
     [SerializeField] private TextAsset surNamesTextAsset;
     [SerializeField] private TextAsset firstNameMaleTextAsset;
     [SerializeField] private TextAsset firstNameFemaleTextAsset;
+
+    [Header("RuntimeButtons")] 
+    [SerializeField] private bool summon;
     
     int maxAge = 75;
     int minAge = 18;
 
+    private EntrantPhotographer _entrantPhotographer;
+    
     private IDictionary<GameObject, EntrantManager.EntrantData> entrantDict;
     private Random random;
 
@@ -30,24 +37,41 @@ public class EntrantGenerator : MonoBehaviour
     private void Awake()
     {
         random = new Random();
-        entrantDict = new Dictionary<GameObject, EntrantManager.EntrantData>();
+        //entrantDict = new Dictionary<GameObject, EntrantManager.EntrantData>();
+        
     }
 
     private void Start()
     {
-        EntrantManager.EntrantData entrantData = GenerateEntrant();
+        /*EntrantManager.EntrantData entrantData = GenerateEntrant();
         SummonPassport(entrantData,new Vector3(0f,0,0));
         SummonEntryPermit(entrantData,new Vector3(0.2f,0,0));
         SummonEntryTicket(entrantData,new Vector3(-0.2f,0,0));
-        SummonIDCard(entrantData, new Vector3(0, 0, -0.1f));
+        SummonIDCard(entrantData, new Vector3(0, 0, -0.1f));*/
+        
+        _entrantPhotographer = FindObjectOfType<EntrantPhotographer>();
     }
 
-    private void SummonEntrant(int index)
+    private void Update()
     {
-        GameObject entrant = Instantiate(entrantBody);
-        EntrantManager.EntrantData entrantData = EntrantManager.LoadEntrant(index);
-        entrantDict.Add(entrant,entrantData);
-        // SummonPassport(entrantData);
+        if (summon)
+        {
+            summon = false;
+            SummonEntrant();
+        }
+    }
+
+    private void SummonEntrant()
+    {
+        GameObject entrant = Instantiate(entrantBody,transform);
+        entrant.transform.Rotate(Vector3.up,180);
+        EntrantManager.EntrantData entrantData = GenerateEntrant();
+        SummonPassport(entrantData,new Vector3(0f,0.9f,-0.5f));
+        SummonEntryPermit(entrantData,new Vector3(0.2f,0.9f,-0.5f));
+        SummonEntryTicket(entrantData,new Vector3(-0.2f,0.9f,-0.5f));
+        SummonIDCard(entrantData, new Vector3(0, 0.9f, -0.6f));
+        _entrantPhotographer.PhotoEntrant(entrantBody);
+        
     }
 
     private void SummonPassport(EntrantManager.EntrantData entrantData, Vector3 offset)
@@ -101,7 +125,6 @@ public class EntrantGenerator : MonoBehaviour
 
         return new EntrantManager.EntrantData(surName, firstName, id, sex, dateOfBirth, issuincity, originCountry, type);
     }
-    
     
     public static List<string> getData(TextAsset textAsset)
     {
