@@ -133,7 +133,7 @@ public class Inspector : MonoBehaviour
             return;
         }
 
-        bool isCorrect = false;
+        bool isCorrect;
         
         switch (buttonToCheck.information)
         {
