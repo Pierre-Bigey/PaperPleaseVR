@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class DocumentButton : MonoBehaviour
 {
-    public EntrantManager.DocumentType documentType { get; private set; }
-    public EntrantManager.InfoType information { get; private set; }
+    public DocumentType documentType { get; private set; }
+    public InfoType information { get; private set; }
     public string displayedValue { get; private set; }
     public string realValue { get; private set; }
     public RawImage image { get; private set; }
@@ -22,7 +22,7 @@ public class DocumentButton : MonoBehaviour
     public static void ResetNumberOfButton()
     {
         numberOfButtons = 0;}
-    public void Initialize(EntrantManager.DocumentType _documentType, EntrantManager.InfoType _information, string _displayerValue, bool isImage = false)
+    public void Initialize(DocumentType _documentType, InfoType _information, string _displayerValue, bool isImage = false)
     {
         this.index = numberOfButtons;
         numberOfButtons++;

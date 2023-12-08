@@ -74,11 +74,11 @@ public class Inspector : MonoBehaviour
                 dButton1 = dButton;
                 
                 //Check if the calendar is clicked
-                if (dButton0.information == EntrantManager.InfoType.CALENDAR_DATE)
+                if (dButton0.information == InfoType.CALENDAR_DATE)
                 {
                     CompareCalendar(1);
                 }
-                else if (dButton1.information == EntrantManager.InfoType.CALENDAR_DATE)
+                else if (dButton1.information == InfoType.CALENDAR_DATE)
                 {
                     CompareCalendar(0);
                 }
@@ -137,20 +137,20 @@ public class Inspector : MonoBehaviour
         
         switch (buttonToCheck.information)
         {
-            case EntrantManager.InfoType.DOB:
+            case InfoType.DOB:
                 isCorrect = difference > 0;
                 break;
             
-            case EntrantManager.InfoType.EXP_DATE:
+            case InfoType.EXP_DATE:
                 isCorrect = difference<0;
                 break;
             
-            case EntrantManager.InfoType.ENTER_BY_DATE:
+            case InfoType.ENTER_BY_DATE:
                 //Comparison with calendar
                 isCorrect = difference<0;
                 break;
             
-            case EntrantManager.InfoType.VALID_ON_DATE:
+            case InfoType.VALID_ON_DATE:
                 //Comparison with calendar
                 isCorrect = difference == 0;
                 break;
@@ -174,90 +174,90 @@ public class Inspector : MonoBehaviour
     {
         switch (dButton0.information)
         {
-            case EntrantManager.InfoType.NAME:
+            case InfoType.NAME:
                 //String =
                 return dButton0.displayedValue.Equals(dButton1.displayedValue);
             
-            case EntrantManager.InfoType.DOB:
+            case InfoType.DOB:
                 DateTime dob0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
                 DateTime dob1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
                 return dob0.Equals(dob1);
             
-            case EntrantManager.InfoType.PASS_ISS:
+            case InfoType.PASS_ISS:
                 //Rule book comparison
                 return true;
             
-            case EntrantManager.InfoType.EXP_DATE:
+            case InfoType.EXP_DATE:
                 DateTime exp0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
                 DateTime exp1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
                 
                 //Calendar comparison
                 return true;
             
-            case EntrantManager.InfoType.PHOTO:
+            case InfoType.PHOTO:
                 //EntrantBody Comparison
                 return true;
             
-            case EntrantManager.InfoType.SEX:
+            case InfoType.SEX:
                 //Comparison with name
                 return true;
             
-            case EntrantManager.InfoType.ID:
+            case InfoType.ID:
                 //String =
                 return dButton0.displayedValue.Equals(dButton1.displayedValue);
             
-            case EntrantManager.InfoType.DISTRICT:
+            case InfoType.DISTRICT:
                 //RuleBook Comparison
                 return true;
             
-            case EntrantManager.InfoType.ENTRYPURPOSE:
+            case InfoType.ENTRYPURPOSE:
                 //Doesn't exist
                 return true;
             
-            case EntrantManager.InfoType.ACCESS_DURATION:
+            case InfoType.ACCESS_DURATION:
                 //Comparison with Purpose
                 return true;
             
-            case EntrantManager.InfoType.HEIGHT:
+            case InfoType.HEIGHT:
                 //Comparison with entrantBody
                 return true;
             
-            case EntrantManager.InfoType.WEIGHT:
+            case InfoType.WEIGHT:
                 //Comparison with entrantBody
                 return true;
             
-            case EntrantManager.InfoType.DESCRIPTION:
+            case InfoType.DESCRIPTION:
                 //Comparison with entrantBody
                 return true;
             
-            case EntrantManager.InfoType.WORK_SEAL:
+            case InfoType.WORK_SEAL:
                 //Comparison with RuleBook
                 return true;
             
-            case EntrantManager.InfoType.WORK_END_DATE:
+            case InfoType.WORK_END_DATE:
                 //Comparison with acces duration and date
                 return true;
             
-            case EntrantManager.InfoType.ENTER_BY_DATE:
+            case InfoType.ENTER_BY_DATE:
                 //Comparison with calendar
                 return true;
             
-            case EntrantManager.InfoType.VALID_ON_DATE:
+            case InfoType.VALID_ON_DATE:
                 //Comparison with calendar
                 return true;
             
-            case EntrantManager.InfoType.COUNTRY:
+            case InfoType.COUNTRY:
                 return true;
             
-            case EntrantManager.InfoType.ALIAS:
+            case InfoType.ALIAS:
                 //Comparison with discourt/Audio transcript
                 return true;
             
-            case EntrantManager.InfoType.COUNTRY_ACCESS:
+            case InfoType.COUNTRY_ACCESS:
                 //Comparison with ruleBook
                 return true;
             
-            case EntrantManager.InfoType.VACCINE:
+            case InfoType.VACCINE:
                 //Comparison with RuleBook
                 return true;
             

@@ -8,194 +8,199 @@ using System.Linq;
 using JetBrains.Annotations;
 using Random = System.Random;
 
-public class EntrantGenerator : MonoBehaviour
+namespace Entrants
 {
-    [Header("Documents Prefabs")]
-    [SerializeField] private GameObject passportPrefab;
-    [SerializeField] private GameObject entryPermitPrefab;
-    [SerializeField] private GameObject entryTicketPrefab;
-    [SerializeField] private GameObject IDCardPrefab;
-    [SerializeField] private GameObject entrantBody;
-
-    [Header("TextsAssets")]
-    [SerializeField] private TextAsset surNamesTextAsset;
-    [SerializeField] private TextAsset firstNameMaleTextAsset;
-    [SerializeField] private TextAsset firstNameFemaleTextAsset;
-
-    [Header("RuntimeButtons")] 
-    [SerializeField] private bool summon;
-    
-    int maxAge = 75;
-    int minAge = 18;
-
-    private EntrantPhotographer _entrantPhotographer;
-    
-    private IDictionary<GameObject, EntrantManager.EntrantData> entrantDict;
-    private Random random;
-
-
-    private void Awake()
+    public class EntrantGenerator : MonoBehaviour
     {
-        random = new Random();
-        //entrantDict = new Dictionary<GameObject, EntrantManager.EntrantData>();
-        
-    }
+        [Header("Documents Prefabs")] [SerializeField]
+        private GameObject passportPrefab;
 
-    private void Start()
-    {
-        /*EntrantManager.EntrantData entrantData = GenerateEntrant();
-        SummonPassport(entrantData,new Vector3(0f,0,0));
-        SummonEntryPermit(entrantData,new Vector3(0.2f,0,0));
-        SummonEntryTicket(entrantData,new Vector3(-0.2f,0,0));
-        SummonIDCard(entrantData, new Vector3(0, 0, -0.1f));*/
-        
-        _entrantPhotographer = FindObjectOfType<EntrantPhotographer>();
-    }
+        [SerializeField] private GameObject entryPermitPrefab;
+        [SerializeField] private GameObject entryTicketPrefab;
+        [SerializeField] private GameObject IDCardPrefab;
+        [SerializeField] private GameObject entrantBody;
 
-    private void Update()
-    {
-        if (summon)
+        [Header("TextsAssets")] [SerializeField]
+        private TextAsset surNamesTextAsset;
+
+        [SerializeField] private TextAsset firstNameMaleTextAsset;
+        [SerializeField] private TextAsset firstNameFemaleTextAsset;
+
+        [Header("RuntimeButtons")] [SerializeField]
+        private bool summon;
+
+        int maxAge = 75;
+        int minAge = 18;
+
+        private EntrantPhotographer _entrantPhotographer;
+
+        private IDictionary<GameObject, EntrantData> entrantDict;
+        private Random random;
+
+
+        private void Awake()
         {
-            summon = false;
-            SummonEntrant();
+            random = new Random();
+            //entrantDict = new Dictionary<GameObject, EntrantManager.EntrantData>();
+
         }
-    }
 
-    private void SummonEntrant()
-    {
-        GameObject entrant = Instantiate(entrantBody,transform);
-        entrant.transform.Rotate(Vector3.up,180);
-        EntrantManager.EntrantData entrantData = GenerateEntrant();
-        SummonPassport(entrantData,new Vector3(0f,0.9f,-0.5f));
-        SummonEntryPermit(entrantData,new Vector3(0.2f,0.9f,-0.5f));
-        SummonEntryTicket(entrantData,new Vector3(-0.2f,0.9f,-0.5f));
-        SummonIDCard(entrantData, new Vector3(0, 0.9f, -0.6f));
-        _entrantPhotographer.PhotoEntrant(entrantBody);
-        
-    }
-
-    private void SummonPassport(EntrantManager.EntrantData entrantData, Vector3 offset)
-    {
-        GameObject passport = Instantiate(passportPrefab,transform);
-        passport.transform.position += offset;
-        PassportScript passScript = passport.GetComponent<PassportScript>();
-        passScript.SetData(entrantData.GetPassportData());
-    }
-
-    private void SummonEntryPermit(EntrantManager.EntrantData entrantData, Vector3 offset)
-    {
-        
-        GameObject entryPermit = Instantiate(entryPermitPrefab, transform);
-        entryPermit.transform.position += offset;
-        EntryPermitScript entryPermitScript = entryPermit.GetComponent<EntryPermitScript>();
-        entryPermitScript.SetData(entrantData.GetEntryPermitData());
-    }
-
-    private void SummonEntryTicket(EntrantManager.EntrantData entrantData, Vector3 offset)
-    {
-        GameObject entryTicket = Instantiate(entryTicketPrefab, transform);
-        entryTicket.transform.position += offset;
-        EntryTicketScript entryTicketScript = entryTicket.GetComponent<EntryTicketScript>();
-        entryTicketScript.SetData(entrantData.GetEntryTicketData());
-    }
-
-    private void SummonIDCard(EntrantManager.EntrantData entrantData, Vector3 offset)
-    {
-        GameObject idCard = Instantiate(IDCardPrefab, transform);
-        idCard.transform.position += offset;
-        IDCardScript idCardScript = idCard.GetComponent<IDCardScript>();
-        idCardScript.SetData(entrantData.GetIDCardData());
-    }
-
-    private EntrantManager.EntrantData GenerateEntrant()
-    {
-        EntrantManager.Sex sex = GetRandomSex();
-        string surName = getRandomSurName(surNamesTextAsset,sex);
-        string firstName;
-        if(sex == EntrantManager.Sex.Male) firstName = getRandomName(firstNameMaleTextAsset);
-        else firstName = getRandomName(firstNameFemaleTextAsset);
-        DateTime dateOfBirth = getRandomDateOfBirth();
-        string id = GetId();
-        EntrantManager.Country originCountry = GetRandomCountry();
-        EntrantManager.EntrantType type;
-        if (originCountry != EntrantManager.Country.ARSTOTKKA) type = EntrantManager.EntrantType.CITIZEN;
-        else type = GetRandomForeignerType();
-
-        string issuincity = GetRandomIssuingCity(originCountry);
-
-        return new EntrantManager.EntrantData(surName, firstName, id, sex, dateOfBirth, issuincity, originCountry, type);
-    }
-    
-    public static List<string> getData(TextAsset textAsset)
-    {
-        List<string> data = new List<string>();
-        StringReader reader = new StringReader(textAsset.text);
-        while (reader.Peek() != -1)
+        private void Start()
         {
-            string line = reader.ReadLine();
-            data.Add(line);
-        }
-        return data;
-    }
 
-    private string getRandomName(TextAsset textAsset)
-    {
-        List<string> nameList = getData(textAsset);
-        //List<string> nameList = getData("Assets/Ressources/"+fileName+".csv");
-        return nameList[random.Next(nameList.Count)];
-    }
-    
-    private string getRandomSurName(TextAsset textAsset, EntrantManager.Sex sex)
-    {
-        List<string> surname = getData(textAsset);
-        //List<string> nameList = getData("Assets/Ressources/"+fileName+".csv");
-        string name = surname[random.Next(surname.Count)];
-        if (name.Contains("/"))
+            _entrantPhotographer = FindObjectOfType<EntrantPhotographer>();
+        }
+
+        private void Update()
         {
-            string[] names = name.Split("/");
-            if (sex == EntrantManager.Sex.Male) return names[0];
-            return names[1];
+            if (summon)
+            {
+                summon = false;
+                SummonEntrant();
+            }
         }
-        return name;
-    }
 
-    private DateTime getRandomDateOfBirth()
-    {
-        int age = random.Next(minAge, maxAge);
-        int daySinceBirthday = random.Next(366);
-        DateTime birthDay = GameManager.Instance.date.AddYears(-age).AddDays(-daySinceBirthday);
-        
-        return birthDay;
-    }
-    
-    private string GetId()
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string(Enumerable.Repeat(chars, 8)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
+        private void SummonEntrant()
+        {
+            GameObject entrant = Instantiate(entrantBody, transform);
+            entrant.transform.Rotate(Vector3.up, 180);
+            EntrantData entrantData = GenerateEntrant();
+            SummonPassport(entrantData, new Vector3(0f, 0.9f, -0.5f));
+            SummonEntryPermit(entrantData, new Vector3(0.2f, 0.9f, -0.5f));
+            SummonEntryTicket(entrantData, new Vector3(-0.2f, 0.9f, -0.5f));
+            SummonIDCard(entrantData, new Vector3(0, 0.9f, -0.6f));
+            _entrantPhotographer.PhotoEntrant(entrantBody);
 
-    private EntrantManager.Sex GetRandomSex()
-    {
-        Array sexs = Enum.GetValues(typeof(EntrantManager.Sex));
-        return (EntrantManager.Sex) sexs.GetValue(random.Next(Enum.GetValues(typeof(EntrantManager.Sex)).Length));
-    }
-    
-    private EntrantManager.Country GetRandomCountry()
-    {
-        Array countries = Enum.GetValues(typeof(EntrantManager.Country));
-        return (EntrantManager.Country) countries.GetValue(random.Next(Enum.GetValues(typeof(EntrantManager.Country)).Length));
-    }
-    
-    private EntrantManager.EntrantType GetRandomForeignerType()
-    {
-        Array entrantTypes = Enum.GetValues(typeof(EntrantManager.EntrantType));
-        return (EntrantManager.EntrantType) entrantTypes.GetValue(random.Next(1,Enum.GetValues(typeof(EntrantManager.EntrantType)).Length));
-    }
+        }
 
-    private string GetRandomIssuingCity(EntrantManager.Country country)
-    {
-        string[] issuingCities = EntrantManager.IssuingCities[country];
-        return (string) issuingCities.GetValue(random.Next(issuingCities.Length));
+        private void SummonPassport(EntrantData entrantData, Vector3 offset)
+        {
+            GameObject passport = Instantiate(passportPrefab, transform);
+            passport.transform.position += offset;
+            PassportScript passScript = passport.GetComponent<PassportScript>();
+            passScript.SetData(entrantData.GetPassportData());
+        }
+
+        private void SummonEntryPermit(EntrantData entrantData, Vector3 offset)
+        {
+
+            GameObject entryPermit = Instantiate(entryPermitPrefab, transform);
+            entryPermit.transform.position += offset;
+            EntryPermitScript entryPermitScript = entryPermit.GetComponent<EntryPermitScript>();
+            entryPermitScript.SetData(entrantData.GetEntryPermitData());
+        }
+
+        private void SummonEntryTicket(EntrantData entrantData, Vector3 offset)
+        {
+            GameObject entryTicket = Instantiate(entryTicketPrefab, transform);
+            entryTicket.transform.position += offset;
+            EntryTicketScript entryTicketScript = entryTicket.GetComponent<EntryTicketScript>();
+            entryTicketScript.SetData(entrantData.GetEntryTicketData());
+        }
+
+        private void SummonIDCard(EntrantData entrantData, Vector3 offset)
+        {
+            GameObject idCard = Instantiate(IDCardPrefab, transform);
+            idCard.transform.position += offset;
+            IDCardScript idCardScript = idCard.GetComponent<IDCardScript>();
+            idCardScript.SetData(entrantData.GetIDCardData());
+        }
+
+        private EntrantData GenerateEntrant()
+        {
+            Sex sex = GetRandomSex();
+            string surName = getRandomSurName(surNamesTextAsset, sex);
+            string firstName;
+            if (sex == Sex.Male) firstName = getRandomName(firstNameMaleTextAsset);
+            else firstName = getRandomName(firstNameFemaleTextAsset);
+            DateTime dateOfBirth = getRandomDateOfBirth();
+            string id = GetId();
+            Country originCountry = GetRandomCountry();
+            EntrantType type;
+            if (originCountry != Country.ARSTOTZKA) type = EntrantType.CITIZEN;
+            else type = GetRandomForeignerType();
+
+            string issuincity = GetRandomIssuingCity(originCountry);
+
+            return new EntrantData(surName, firstName, id, sex, dateOfBirth, issuincity, originCountry,
+                type);
+        }
+
+        public static List<string> getData(TextAsset textAsset)
+        {
+            List<string> data = new List<string>();
+            StringReader reader = new StringReader(textAsset.text);
+            while (reader.Peek() != -1)
+            {
+                string line = reader.ReadLine();
+                data.Add(line);
+            }
+
+            return data;
+        }
+
+        private string getRandomName(TextAsset textAsset)
+        {
+            List<string> nameList = getData(textAsset);
+            //List<string> nameList = getData("Assets/Ressources/"+fileName+".csv");
+            return nameList[random.Next(nameList.Count)];
+        }
+
+        private string getRandomSurName(TextAsset textAsset, Sex sex)
+        {
+            List<string> surname = getData(textAsset);
+            //List<string> nameList = getData("Assets/Ressources/"+fileName+".csv");
+            string name = surname[random.Next(surname.Count)];
+            if (name.Contains("/"))
+            {
+                string[] names = name.Split("/");
+                if (sex == Sex.Male) return names[0];
+                return names[1];
+            }
+
+            return name;
+        }
+
+        private DateTime getRandomDateOfBirth()
+        {
+            int age = random.Next(minAge, maxAge);
+            int daySinceBirthday = random.Next(366);
+            DateTime birthDay = GameManager.Instance.date.AddYears(-age).AddDays(-daySinceBirthday);
+
+            return birthDay;
+        }
+
+        private string GetId()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 8)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private Sex GetRandomSex()
+        {
+            Array sexs = Enum.GetValues(typeof(Sex));
+            return (Sex)sexs.GetValue(random.Next(Enum.GetValues(typeof(Sex)).Length));
+        }
+
+        private Country GetRandomCountry()
+        {
+            Array countries = Enum.GetValues(typeof(Country));
+            return (Country)countries.GetValue(random.Next(Enum.GetValues(typeof(Country))
+                .Length));
+        }
+
+        private EntrantType GetRandomForeignerType()
+        {
+            Array entrantTypes = Enum.GetValues(typeof(EntrantType));
+            return (EntrantType)entrantTypes.GetValue(random.Next(1,
+                Enum.GetValues(typeof(EntrantType)).Length));
+        }
+
+        private string GetRandomIssuingCity(Country country)
+        {
+            string[] issuingCities = EntrantManager.IssuingCities[country];
+            return (string)issuingCities.GetValue(random.Next(issuingCities.Length));
+        }
     }
 }

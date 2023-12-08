@@ -566,7 +566,7 @@ MonoBehaviour:
     type: 3}
   IDCardPrefab: {fileID: 8930424393168831548, guid: cf770f6d6f0c4b74c94e235b936443f7,
     type: 3}
-  entrantBody: {fileID: 1876184970185692, guid: 5fcaef3ac9ba40340ac6388278cee935,
+  entrantBody: {fileID: 1889313545690738, guid: b742a5761b128ed4bb195b68c0ae42f3,
     type: 3}
   surNamesTextAsset: {fileID: 4900000, guid: 2d0a72f3cbc7c484d9a0ebefda3d6b4a, type: 3}
   firstNameMaleTextAsset: {fileID: 4900000, guid: 8cb050bc4235ce746bcf7d6ddad98263,

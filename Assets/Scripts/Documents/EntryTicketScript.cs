@@ -14,8 +14,8 @@ public class EntryTicketScript : MonoBehaviour
     //(string name, string id, string purpose, string duration, string enterByDate)
     public void SetData(DateTime data)
     {
-        EntrantManager.DocumentType docType = EntrantManager.DocumentType.ENTRY_TICKET;
-        ValidOnDateButton.Initialize(docType,EntrantManager.InfoType.VALID_ON_DATE, data.ToString("yyyy.MM.dd"));
+        DocumentType docType = DocumentType.ENTRY_TICKET;
+        ValidOnDateButton.Initialize(docType,InfoType.VALID_ON_DATE, data.ToString("yyyy.MM.dd"));
     }
 
 }
