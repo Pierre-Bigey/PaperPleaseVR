@@ -16,7 +16,6 @@ public class ClockScript : MonoBehaviour
     {
         
         (float hour, float minute) = GameManager.Instance.inGameTime;
-        Debug.Log("UpdateClock");
         Hours.localRotation = Quaternion.Euler (0, 0, (hour + minute/60) / 12 * 360);
         Minutes.localRotation = Quaternion.Euler (0, 0, minute / 60 * 360);
     }

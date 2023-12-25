@@ -64,10 +64,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator InGameMinuter()
     {
-        Debug.Log("Start timer");
         while (inGameTime.Item1 < endHour.Item1 )
         {
-            Debug.Log("Minute added");
             Debug.Log(inGameTime.ToString());
             AddMinute();
             yield return new WaitForSeconds(1 / inGameTimeRatio);
