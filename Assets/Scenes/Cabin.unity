@@ -884,7 +884,7 @@ GameObject:
   - component: {fileID: 327819921}
   - component: {fileID: 327819920}
   m_Layer: 0
-  m_Name: EntrantGenerator (1)
+  m_Name: EntrantGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1662,7 +1662,7 @@ PrefabInstance:
     - target: {fileID: 7350603827377162929, guid: 1b05b250ef443724f8848e35b2133ff8,
         type: 3}
       propertyPath: m_Name
-      value: EntrantPhotographer (1)
+      value: EntrantPhotographer
       objectReference: {fileID: 0}
     - target: {fileID: 7350603827377162931, guid: 1b05b250ef443724f8848e35b2133ff8,
         type: 3}

@@ -11,7 +11,11 @@ public class GameManager : MonoBehaviour
         get { return _instance;  }
     }
     
+    public readonly DateTime startDate = new DateTime(1982, 11, 23);
+    
     public DateTime date { get; private set; }
+
+    public bool addDay = false;
     
     private void Awake()
     {
@@ -24,9 +28,18 @@ public class GameManager : MonoBehaviour
         }
         
         //date initialization
-        
-        date = new DateTime(1982, 11, 23);
+
+        date = startDate;
         CalendarController.Instance.UpdateCalendar();
+    }
+
+    private void Update()
+    {
+        if (addDay)
+        {
+            addDay = false;
+            AddDay();
+        }
     }
 
     public void AddDay()

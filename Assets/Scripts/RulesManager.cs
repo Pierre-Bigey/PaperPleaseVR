@@ -1,61 +1,52 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Entrants
 {
-    
-
-    public class Rule
+    public class RuleSubject
     {
-        public class RuleSubject
+        public readonly bool country; //True if entrant's country, false if entrant's type
+        public readonly List<Country> countriesSubjects;
+        public readonly EntrantType entrantTypeSubject;
+
+        public RuleSubject( List<Country> _countriesSubjects = null, EntrantType _entrantTypeSubject = EntrantType.WORKER, bool _country = true)
         {
-            public readonly bool country; //True if entrant's country, false if entrant's type
-            public readonly List<Country> countriesSubjects;
-            public readonly List<EntrantType> entrantTypeSubject;
-
-            public RuleSubject( List<Country> _countriesSubjects = null,List<EntrantType> _entrantTypeSubject= null, bool _country = true)
-            {
-                country = _country;
-                countriesSubjects = _countriesSubjects;
-                entrantTypeSubject = _entrantTypeSubject;
-            }
-
+            country = _country;
+            countriesSubjects = _countriesSubjects;
+            entrantTypeSubject = _entrantTypeSubject;
         }
+
+        public bool IsConcerned(Country entrantOrigin, EntrantType entrantType)
+        {
+            if (country) return countriesSubjects.Contains(entrantOrigin);
+            else return entrantTypeSubject == entrantType;
+        }
+
+    }
+    
+    public enum RuleSubjectShortcut{
+        ALL,
+        FOREIGNER,
+        CITIZEN,
+        SPEC_CITIZEN,
+        SPEC_TYPE
+    }
+
+    public class RuleDocToPresent
+    {
         
-        #region rulesEnums
-        public enum RuleSubjectShortcut{
-            ALL,
-            FOREIGNER,
-            CITIZEN,
-            SPEC_CITIZEN,
-            SPEC_TYPE
-        }
-        public enum RuleCondition
-        {
-            HAVE_DOCUMENT,
-            HAVE_CONTRABAND,
-            ALWAYS
-        }
-        public enum RuleAction
-        {
-            ENTER,
-            SEARCH,
-            CONFISCATE_DOC
-        }
-        #endregion
 
         public readonly RuleSubject subject;
-        public readonly RuleCondition condition;
-        public readonly RuleAction action;
+        public readonly DocumentType docToPresent;
         public readonly string description;
         public readonly int index;
 
-        public Rule(int _index, string _description, RuleSubjectShortcut _subjectShortcut, RuleCondition _condition, RuleAction  _action, List<Country> countriesSubjects = null,  List<EntrantType> typesSubject = null)
+        public RuleDocToPresent(string _description, RuleSubjectShortcut _subjectShortcut, DocumentType _docToPresent, List<Country> countriesSubjects = null,  EntrantType typesSubject = EntrantType.WORKER)
         {
-            index = _index;
             description = _description;
             
             switch (_subjectShortcut)
@@ -99,8 +90,7 @@ namespace Entrants
                 
             }
 
-            condition = _condition;
-            action = _action;
+            docToPresent = _docToPresent;
         }
         
     }
@@ -131,9 +121,55 @@ namespace Entrants
             { DocumentType.CERTIF_OF_VACCINATION, "dd.MM.yy" },
         };
 
-        // public static List<Rule> ruleList = { new Rule(0,"Entrant must have a passport",Rule.RuleSubjectShortcut.ALL,Rule.RuleCondition.HAVE_DOCUMENT,Rule.RuleAction.ENTER) };
+        public static List<RuleDocToPresent> RulesDocsToPresentsList = new List<RuleDocToPresent>()
+        {
+            new RuleDocToPresent("Entrant must have a passport", RuleSubjectShortcut.ALL, DocumentType.PASSPORT),//0
+            new RuleDocToPresent("Foreigners require an entry ticket", RuleSubjectShortcut.FOREIGNER, DocumentType.ENTRY_TICKET),//1
+            new RuleDocToPresent("Foreigners require an entry permit", RuleSubjectShortcut.FOREIGNER, DocumentType.ENTRY_PERMIT),//2
+            new RuleDocToPresent("Arstotzkan citizens must have an ID card", RuleSubjectShortcut.CITIZEN, DocumentType.ID_CARD),//3
+            new RuleDocToPresent("Workers must have a work pass", RuleSubjectShortcut.SPEC_TYPE, DocumentType.WORK_PASS,typesSubject:EntrantType.WORKER),//4
+            new RuleDocToPresent("Diplomats require authorization", RuleSubjectShortcut.SPEC_TYPE, DocumentType.DIPLO_AUTH,typesSubject:EntrantType.DIPLOMAT),//5
+            new RuleDocToPresent("Foreigners require an ID supplement", RuleSubjectShortcut.FOREIGNER, DocumentType.ID_SUPPLEMENT),//6
+            new RuleDocToPresent("Asylum seekers must have a grant", RuleSubjectShortcut.SPEC_TYPE, DocumentType.GRANT_OF_ASYLUM,typesSubject:EntrantType.ASYLUM_SEEKER),//7
+            new RuleDocToPresent("Entrant must have polio vaccine certificate", RuleSubjectShortcut.ALL, DocumentType.CERTIF_OF_VACCINATION),//8
+            new RuleDocToPresent("Foreigners require an access permit", RuleSubjectShortcut.FOREIGNER, DocumentType.ACCESS_PERMIT),//9
+        };
 
-        // public static Dictionary<DateTime, List<DocumentType>> 
+        public static Dictionary<int, List<RuleDocToPresent>> DocToPresentEachDay =
+            new Dictionary<int, List<RuleDocToPresent>>()
+            {
+                {1,RulesDocsToPresentsList.GetRange(0,1)},
+                {2,RulesDocsToPresentsList.GetRange(0,1)},
+                {3,RulesDocsToPresentsList.GetRange(0,2)},
+                {4,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3]}},
+                {5,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3]}},
+                {6,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4]}},
+                {7,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4]}},
+                {8,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+                {9,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+                {10,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+                {11,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+                {12,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+                {13,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {14,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {15,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {16,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {17,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {18,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {19,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {20,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+                {21,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+                {22,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+                {23,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+                {24,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+                {25,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+                {26,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+                {27,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+                {28,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+                {29,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+                {30,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+                {31,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+            };
 
     }
 }

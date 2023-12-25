@@ -65,10 +65,55 @@ namespace Entrants
             GameObject entrant = Instantiate(entrantBody, transform);
             entrant.transform.Rotate(Vector3.up, 180);
             EntrantData entrantData = GenerateEntrant();
-            SummonPassport(entrantData, new Vector3(0f, 0.9f, -0.5f));
-            SummonEntryPermit(entrantData, new Vector3(0.2f, 0.9f, -0.5f));
-            SummonEntryTicket(entrantData, new Vector3(-0.2f, 0.9f, -0.5f));
-            SummonIDCard(entrantData, new Vector3(0, 0.9f, -0.6f));
+
+
+            int currentDay = (int) (GameManager.Instance.date - GameManager.Instance.startDate).TotalDays +1 ;
+            List<RuleDocToPresent> ruleDocToPresents = RulesManager.DocToPresentEachDay[currentDay];
+
+            foreach (var rule in ruleDocToPresents)
+            {
+                if (rule.subject.IsConcerned(entrantData.originCountry, entrantData.type))
+                {
+                    switch (rule.docToPresent)
+                    {
+                        case DocumentType.PASSPORT:
+                            SummonPassport(entrantData, new Vector3(0f, 0.9f, -0.5f));
+                            break;
+                        case DocumentType.ID_CARD:
+                            SummonIDCard(entrantData, new Vector3(0, 0.9f, -0.6f));
+                            break;
+                        case DocumentType.WORK_PASS:
+                            //TODO Summon WorkPass
+                            break;
+                        case DocumentType.DIPLO_AUTH:
+                            //TODO
+                            break;
+                        case DocumentType.ENTRY_PERMIT:
+                            SummonEntryPermit(entrantData, new Vector3(0.2f, 0.9f, -0.5f));
+                            break;
+                        case DocumentType.ENTRY_TICKET:
+                            SummonEntryTicket(entrantData, new Vector3(-0.2f, 0.9f, -0.5f));
+                            break;
+                        case DocumentType.ID_SUPPLEMENT:
+                            //TODO
+                            break;
+                        case DocumentType.GRANT_OF_ASYLUM:
+                            //TODO
+                            break;
+                        case DocumentType.ACCESS_PERMIT:
+                            //TODO
+                            break;
+                        case DocumentType.CERTIF_OF_VACCINATION:
+                            //TODO
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            
+            
             _entrantPhotographer.PhotoEntrant(entrantBody);
 
         }

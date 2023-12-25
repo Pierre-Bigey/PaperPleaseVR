@@ -23,7 +23,6 @@ public class CalendarController : MonoBehaviour
         else
         {
             _instance = this;
-            DontDestroyOnLoad(this);
         }
         
         NovemberMonth = transform.Find("November").gameObject;
@@ -64,8 +63,6 @@ public class CalendarController : MonoBehaviour
 
         int row = (day + offset) / 7 ;
         int column = (day + offset) % 7;
-        
-        Debug.Log("Ask to place on row"+row+" and column"+column);
 
         return GetCalendarPosition(row, column);
     }
