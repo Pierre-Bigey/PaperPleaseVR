@@ -32,6 +32,12 @@ public class CalendarController : MonoBehaviour
         
     }
 
+    private void Start()
+    {
+        GameManager.DayAdded += UpdateCalendar;
+        UpdateCalendar();
+    }
+
     public void UpdateCalendar()
     {
         DateTime date = GameManager.Instance.date;
