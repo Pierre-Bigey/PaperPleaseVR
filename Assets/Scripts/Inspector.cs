@@ -123,7 +123,7 @@ public class Inspector : MonoBehaviour
         
         try
         {
-            DateTime buttonDate = DateTime.ParseExact(buttonToCheck.displayedValue, EntrantManager.dateFormat[buttonToCheck.documentType], null);
+            DateTime buttonDate = DateTime.ParseExact(buttonToCheck.displayedValue, RulesManager.dateFormat[buttonToCheck.documentType], null);
             difference = DateTime.Compare(GameManager.Instance.date, buttonDate);
         }
         catch (Exception e)
@@ -179,8 +179,8 @@ public class Inspector : MonoBehaviour
                 return dButton0.displayedValue.Equals(dButton1.displayedValue);
             
             case InfoType.DOB:
-                DateTime dob0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
-                DateTime dob1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
+                DateTime dob0 = DateTime.ParseExact(dButton0.displayedValue, RulesManager.dateFormat[dButton0.documentType], null);
+                DateTime dob1 = DateTime.ParseExact(dButton1.displayedValue, RulesManager.dateFormat[dButton1.documentType], null);
                 return dob0.Equals(dob1);
             
             case InfoType.PASS_ISS:
@@ -188,8 +188,8 @@ public class Inspector : MonoBehaviour
                 return true;
             
             case InfoType.EXP_DATE:
-                DateTime exp0 = DateTime.ParseExact(dButton0.displayedValue, EntrantManager.dateFormat[dButton0.documentType], null);
-                DateTime exp1 = DateTime.ParseExact(dButton1.displayedValue, EntrantManager.dateFormat[dButton1.documentType], null);
+                DateTime exp0 = DateTime.ParseExact(dButton0.displayedValue, RulesManager.dateFormat[dButton0.documentType], null);
+                DateTime exp1 = DateTime.ParseExact(dButton1.displayedValue, RulesManager.dateFormat[dButton1.documentType], null);
                 
                 //Calendar comparison
                 return true;

@@ -1145,7 +1145,7 @@ GameObject:
   - component: {fileID: 1142252551}
   - component: {fileID: 1142252550}
   m_Layer: 0
-  m_Name: inspector
+  m_Name: Inspector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -380,31 +380,6 @@ namespace Entrants
     
     public class EntrantManager
     {
-        
-        public static Dictionary<Country, string[]> IssuingCities = new()
-        {
-            {Country.ANTEGRIA, new string[] {"St. Marmero", "Glorian", "Outer Grouse"} },
-            {Country.ARSTOTZKA, new string[] {"Orvech Vonor", "East Grestin", "Paradizna"} },
-            {Country.IMPOR, new string[] {"Enkyo", "Haihan", "Tsunkeido"} },
-            {Country.KOLECHIA, new string[] {"Yurko City", "Vedor", "West Grestin"} },
-            {Country.OBRISTAN, new string[] {"Skal", "Lorndaz", "Mergerous"} },
-            {Country.REPUBLIA, new string[] {"True Glorian", "Lesrenadi", "Bostan"} },
-            {Country.UNITED_FEDERATION, new string[] {"Great Rapid", "Shingleton", "Korista City"} },
-        };
-
-        public static Dictionary<DocumentType, string> dateFormat = new()
-        {
-            { DocumentType.PASSPORT, "dd.MM.yyyy" },
-            { DocumentType.ID_SUPPLEMENT, "dd.MM.yyyy" },
-            { DocumentType.ACCESS_PERMIT, "dd.MM.yyyy" },
-            { DocumentType.GRANT_OF_ASYLUM, "dd.MM.yyyy" },
-            { DocumentType.ENTRY_PERMIT, "yyyy.MM.dd" },
-            { DocumentType.ID_CARD, "yyyy.MM.dd" },
-            { DocumentType.ENTRY_TICKET, "yyyy.MM.dd" },
-            { DocumentType.CERTIF_OF_VACCINATION, "dd.MM.yy" },
-        };
-
-
         public static double incorrectRate = 0.45;
         
         public static void SaveEntrant(EntrantData entrantData)

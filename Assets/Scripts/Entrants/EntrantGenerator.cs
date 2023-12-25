@@ -199,7 +199,7 @@ namespace Entrants
 
         private string GetRandomIssuingCity(Country country)
         {
-            string[] issuingCities = EntrantManager.IssuingCities[country];
+            string[] issuingCities = RulesManager.IssuingCities[country];
             return (string)issuingCities.GetValue(random.Next(issuingCities.Length));
         }
     }
