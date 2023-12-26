@@ -18,8 +18,7 @@ namespace Entrants
         KOLECHIA,
         OBRISTAN,
         REPUBLIA,
-        UNITED_FEDERATION,
-        COBRASTAN,
+        UNITED_FEDERATION
     }
     
     public enum Sex {Male, Female};

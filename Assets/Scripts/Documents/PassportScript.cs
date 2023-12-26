@@ -20,7 +20,7 @@ public class PassportScript : MonoBehaviour
     [SerializeField] private DocumentButton idButton;
     [SerializeField] private DocumentButton photoButton;
 
-    public bool isOpened;
+    private bool isOpened;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +29,7 @@ public class PassportScript : MonoBehaviour
         
     }
 
-    private void CorrectIsOpened()
+    public void CorrectIsOpened()
     {
         passportOpened.SetActive(isOpened);
         passportClosed.SetActive(!isOpened);
@@ -52,6 +52,12 @@ public class PassportScript : MonoBehaviour
     public void SwitchIsOpened()
     {
         isOpened = !isOpened;
+        CorrectIsOpened();
+    }
+
+    public void SetIsOpen(bool value)
+    {
+        isOpened = value;
         CorrectIsOpened();
     }
 }

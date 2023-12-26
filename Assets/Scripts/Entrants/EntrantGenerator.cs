@@ -12,9 +12,16 @@ namespace Entrants
 {
     public class EntrantGenerator : MonoBehaviour
     {
-        [Header("Documents Prefabs")] [SerializeField]
-        private GameObject passportPrefab;
-
+        [Header("Passports Prefabs")] 
+        [SerializeField] private GameObject antegriaPrefab;
+        [SerializeField] private GameObject arstotzkaPrefab;
+        [SerializeField] private GameObject imporPrefab;
+        [SerializeField] private GameObject kolechiaPrefab;
+        [SerializeField] private GameObject obristanPrefab;
+        [SerializeField] private GameObject republiaPrefab;
+        [SerializeField] private GameObject unitedFederationPrefab;
+        
+        [Header("Other documents Prefabs")] 
         [SerializeField] private GameObject entryPermitPrefab;
         [SerializeField] private GameObject entryTicketPrefab;
         [SerializeField] private GameObject IDCardPrefab;
@@ -120,10 +127,38 @@ namespace Entrants
 
         private void SummonPassport(EntrantData entrantData, Vector3 offset)
         {
-            GameObject passport = Instantiate(passportPrefab, transform);
+            GameObject passport;
+            switch (entrantData.originCountry)
+            {
+                case Country.IMPOR:
+                    passport = Instantiate(imporPrefab, transform);
+                    break;
+                case Country.ANTEGRIA:
+                    passport = Instantiate(antegriaPrefab, transform);
+                    break;
+                case Country.KOLECHIA:
+                    passport = Instantiate(kolechiaPrefab, transform);
+                    break;
+                case Country.OBRISTAN:
+                    passport = Instantiate(obristanPrefab, transform);
+                    break;
+                case Country.REPUBLIA:
+                    passport = Instantiate(republiaPrefab, transform);
+                    break;
+                case Country.ARSTOTZKA:
+                    passport = Instantiate(arstotzkaPrefab, transform);
+                    break;
+                case Country.UNITED_FEDERATION:
+                    passport = Instantiate(unitedFederationPrefab, transform);
+                    break;
+                default:
+                    passport = Instantiate(arstotzkaPrefab, transform);
+                    break;
+            }
             passport.transform.position += offset;
             PassportScript passScript = passport.GetComponent<PassportScript>();
             passScript.SetData(entrantData.GetPassportData());
+            passScript.SetIsOpen(false);
         }
 
         private void SummonEntryPermit(EntrantData entrantData, Vector3 offset)
