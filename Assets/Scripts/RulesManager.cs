@@ -43,7 +43,6 @@ namespace Entrants
         public readonly RuleSubject subject;
         public readonly DocumentType docToPresent;
         public readonly string description;
-        public readonly int index;
 
         public RuleDocToPresent(string _description, RuleSubjectShortcut _subjectShortcut, DocumentType _docToPresent, List<Country> countriesSubjects = null,  EntrantType typesSubject = EntrantType.WORKER)
         {
@@ -94,6 +93,61 @@ namespace Entrants
         }
         
     }
+
+    /// <summary>
+    /// When a subject is concerned by this rules, he cannot pass the frontier
+    /// </summary>
+    public class RuleToEnter
+    {
+        public readonly RuleSubject subject;
+        public readonly string description;
+
+        public RuleToEnter(string _description, RuleSubjectShortcut _subjectShortcut, List<Country> countriesSubjects = null)
+        {
+            description = _description;
+            switch (_subjectShortcut)
+            {
+                case RuleSubjectShortcut.ALL:
+                    subject = new RuleSubject(new List<Country>()
+                    {
+                        Country.ANTEGRIA,
+                        Country.ARSTOTZKA,
+                        Country.IMPOR,
+                        Country.KOLECHIA,
+                        Country.OBRISTAN,
+                        Country.REPUBLIA,
+                        Country.UNITED_FEDERATION
+                    });
+                    break;
+                
+                case RuleSubjectShortcut.CITIZEN:
+                    subject = new RuleSubject(new List<Country>() {Country.ARSTOTZKA, });
+                    break;
+                
+                case RuleSubjectShortcut.FOREIGNER:
+                    subject = new RuleSubject(new List<Country>()
+                    {
+                        Country.ANTEGRIA,
+                        Country.IMPOR,
+                        Country.KOLECHIA,
+                        Country.OBRISTAN,
+                        Country.REPUBLIA,
+                        Country.UNITED_FEDERATION
+                    });
+                    break;
+                
+                case RuleSubjectShortcut.SPEC_CITIZEN:
+                    subject = new RuleSubject(countriesSubjects);
+                    break;
+                
+                //This case shouldn't happen so I put it as citizen
+                case RuleSubjectShortcut.SPEC_TYPE:
+                    subject = new RuleSubject(new List<Country>() {Country.ARSTOTZKA, });
+                    break;
+                
+            }
+        }
+    }
     
     
     public static class RulesManager
@@ -135,41 +189,54 @@ namespace Entrants
             new RuleDocToPresent("Foreigners require an access permit", RuleSubjectShortcut.FOREIGNER, DocumentType.ACCESS_PERMIT),//9
         };
 
-        public static Dictionary<int, List<RuleDocToPresent>> DocToPresentEachDay =
-            new Dictionary<int, List<RuleDocToPresent>>()
-            {
-                {1,RulesDocsToPresentsList.GetRange(0,1)},
-                {2,RulesDocsToPresentsList.GetRange(0,1)},
-                {3,RulesDocsToPresentsList.GetRange(0,2)},
-                {4,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3]}},
-                {5,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3]}},
-                {6,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4]}},
-                {7,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4]}},
-                {8,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
-                {9,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
-                {10,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
-                {11,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
-                {12,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
-                {13,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {14,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {15,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {16,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {17,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {18,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {19,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {20,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
-                {21,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
-                {22,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
-                {23,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
-                {24,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
-                {25,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
-                {26,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
-                {27,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
-                {28,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
-                {29,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
-                {30,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
-                {31,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
-            };
+        public static Dictionary<int, List<RuleDocToPresent>> DocToPresentEachDay = new Dictionary<int, List<RuleDocToPresent>>()
+        {
+            {1,RulesDocsToPresentsList.GetRange(0,1)},
+            {2,RulesDocsToPresentsList.GetRange(0,1)},
+            {3,RulesDocsToPresentsList.GetRange(0,2)},
+            {4,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3]}},
+            {5,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3]}},
+            {6,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4]}},
+            {7,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4]}},
+            {8,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+            {9,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+            {10,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+            {11,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+            {12,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5]}},
+            {13,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {14,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {15,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {16,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {17,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {18,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {19,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {20,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6]}},
+            {21,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+            {22,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+            {23,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+            {24,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+            {25,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7]}},
+            {26,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[2],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[6],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+            {27,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+            {28,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+            {29,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+            {30,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+            {31,new List<RuleDocToPresent>(){RulesDocsToPresentsList[0],RulesDocsToPresentsList[9],RulesDocsToPresentsList[3],RulesDocsToPresentsList[4],RulesDocsToPresentsList[5],RulesDocsToPresentsList[7],RulesDocsToPresentsList[8]}},
+        };
+        
+        public static List<RuleToEnter> RulesToEnterList = new List<RuleToEnter>()
+        {
+            new RuleToEnter("Arstotzkan citizens only", RuleSubjectShortcut.FOREIGNER),//0
+            new RuleToEnter("No entry from Impor", RuleSubjectShortcut.SPEC_CITIZEN, new List<Country>(){Country.IMPOR }),//1
+            new RuleToEnter("No entry from United Federation", RuleSubjectShortcut.SPEC_CITIZEN, new List<Country>(){Country.UNITED_FEDERATION }),//2
+        };
+
+        public static Dictionary<int, List<RuleToEnter>> CanEnterEachDay = new Dictionary<int, List<RuleToEnter>>()
+        {
+            { 1, RulesToEnterList.GetRange(0, 1) },
+            { 19, RulesToEnterList.GetRange(1, 1) },
+            { 25, RulesToEnterList.GetRange(2, 1) },
+        };
 
     }
 }

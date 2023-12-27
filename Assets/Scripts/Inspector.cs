@@ -112,7 +112,6 @@ public class Inspector : MonoBehaviour
         }
     }
 
-
     private void CompareCalendar(int buttonNumero)
     {
         DocumentButton buttonToCheck = dButton0;
@@ -316,5 +315,4 @@ public class Inspector : MonoBehaviour
         }
     }
     
-
 }

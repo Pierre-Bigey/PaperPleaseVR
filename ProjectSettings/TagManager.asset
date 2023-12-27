@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Passport
+  - RightHand
+  - LeftHand
+  - Pointer
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Grabbable
   - Stamper
   - PassportStampPage
   - EntrantView

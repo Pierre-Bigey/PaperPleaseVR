@@ -387,6 +387,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674821759559459567, guid: d6878e1999eb4b44a9f5a263af86c185,
         type: 3}
+      propertyPath: m_MaxRaycastDistance
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 674821759559459567, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
       propertyPath: m_RaycastMask.m_Bits
       value: 2147484705
       objectReference: {fileID: 0}
@@ -394,6 +399,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
       value: 1280
+      objectReference: {fileID: 0}
+    - target: {fileID: 786759544300764772, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_MaxRaycastDistance
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 786759544300764772, guid: d6878e1999eb4b44a9f5a263af86c185,
         type: 3}
@@ -495,6 +505,16 @@ PrefabInstance:
       propertyPath: m_AttachTransform
       value: 
       objectReference: {fileID: 2129493168}
+    - target: {fileID: 3844105587933937856, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_PhysicsLayerMask.m_Bits
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844105587933937856, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 4187453166268435132, guid: d6878e1999eb4b44a9f5a263af86c185,
         type: 3}
       propertyPath: m_IsActive
