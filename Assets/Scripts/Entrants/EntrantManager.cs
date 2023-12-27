@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Documents;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -377,10 +378,187 @@ namespace Entrants
         
     }
     
-    public class EntrantManager
+    
+    public class EntrantManager : MonoBehaviour
     {
-        public static double incorrectRate = 0.45;
+        private static EntrantManager _instance;
+        public static EntrantManager Instance
+        {
+            get { return _instance;  }
+        }
         
+        [Header("Script references")]
+        [SerializeField] private EntrantGenerator _entrantGenerator;
+        [SerializeField] private EntrantPhotographer _entrantPhotographer;
+
+        
+        [Header("World positions")] 
+        [SerializeField] private Transform documentsSpawnPos;
+        [SerializeField] private Transform entrantSpawnPos;
+        [SerializeField] private Vector3 documentThrowForce;
+        
+        
+        public static double incorrectRate = 0.65;
+
+        private GameObject currentEntrantBody;
+        private EntrantData currentEntrantData;
+
+        private Dictionary<DocumentType, GameObject> documentDictionary;
+        private bool accessGranted = false;
+        private bool isReturningDocuments = false;
+
+
+        private void Awake()
+        {
+            //Singleton instantiation
+            if (_instance != null && _instance != this) Destroy(gameObject);
+            else
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            SummonEntrant();
+        }
+
+        public void SummonEntrant()
+        {
+            currentEntrantBody = _entrantGenerator.SummonEntrantBody();
+            currentEntrantBody.transform.rotation = entrantSpawnPos.transform.rotation;
+            currentEntrantBody.transform.position = entrantSpawnPos.position;
+            
+            currentEntrantData = _entrantGenerator.GenerateRandomEntrantData();
+
+            SummonCurrentDocuments();
+            _entrantPhotographer.PhotoEntrant(currentEntrantBody);
+            foreach (var (type,document) in documentDictionary)
+            {
+                ThrowDocument(document);
+            }
+
+            isReturningDocuments = false;
+            accessGranted = false;
+        }
+
+        public void SummonCurrentDocuments()
+        {
+            int currentDay = (int) (GameManager.Instance.date - GameManager.Instance.startDate).TotalDays +1 ;
+            List<RuleDocToPresent> ruleDocToPresents = RulesManager.DocToPresentEachDay[currentDay];
+
+            documentDictionary = new Dictionary<DocumentType, GameObject>();
+            
+            foreach (var rule in ruleDocToPresents)
+            {
+                if (rule.subject.IsConcerned(currentEntrantData.originCountry, currentEntrantData.type))
+                {
+                    switch (rule.docToPresent)
+                    {
+                        case DocumentType.PASSPORT:
+                            GameObject passport = _entrantGenerator.SummonPassport(currentEntrantData, new Vector3(0f, 0.9f, -0.5f));
+                            documentDictionary.Add(DocumentType.PASSPORT,passport);
+                            break;
+                        case DocumentType.ID_CARD:
+                            GameObject idcard = _entrantGenerator.SummonIDCard(currentEntrantData, new Vector3(0, 0.9f, -0.6f));
+                            documentDictionary.Add(DocumentType.ID_CARD,idcard);
+                            break;
+                        case DocumentType.WORK_PASS:
+                            //TODO Summon WorkPass
+                            break;
+                        case DocumentType.DIPLO_AUTH:
+                            //TODO
+                            break;
+                        case DocumentType.ENTRY_PERMIT:
+                            GameObject entrypermit = _entrantGenerator.SummonEntryPermit(currentEntrantData, new Vector3(0.2f, 0.9f, -0.5f));
+                            documentDictionary.Add(DocumentType.ENTRY_PERMIT,entrypermit);
+                            break;
+                        case DocumentType.ENTRY_TICKET:
+                            GameObject entryticket = _entrantGenerator.SummonEntryTicket(currentEntrantData, new Vector3(-0.2f, 0.9f, -0.5f));
+                            documentDictionary.Add(DocumentType.ENTRY_TICKET,entryticket);
+                            break;
+                        case DocumentType.ID_SUPPLEMENT:
+                            //TODO
+                            break;
+                        case DocumentType.GRANT_OF_ASYLUM:
+                            //TODO
+                            break;
+                        case DocumentType.ACCESS_PERMIT:
+                            //TODO
+                            break;
+                        case DocumentType.CERTIF_OF_VACCINATION:
+                            //TODO
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void ThrowDocument(GameObject document)
+        {
+            Debug.Log("Throwing object : "+document.name);
+            if (document.TryGetComponent(out Rigidbody rb))
+            {
+                rb.AddForce(documentThrowForce,ForceMode.Impulse);
+                document.transform.position = documentsSpawnPos.position;
+                return;
+            }
+            
+        }
+
+        public void ProcessReturnedDocument(GameObject document)
+        {
+            try
+            {
+                PassportScript passportScript = document.transform.parent.gameObject.GetComponent<PassportScript>();
+                
+                Debug.Log("We recieve a passport, stamped : "+passportScript.isStamped);
+                
+                if (passportScript.isStamped)
+                {
+                    isReturningDocuments = true;
+                    accessGranted = passportScript.accessGranted;
+                    
+                    Destroy(documentDictionary[DocumentType.PASSPORT]);
+                    documentDictionary.Remove(DocumentType.PASSPORT);
+                }
+                else
+                {
+                    document.transform.position = documentsSpawnPos.position;
+                    Rigidbody rb = document.transform.parent.gameObject.GetComponent<Rigidbody>();
+                    rb.AddForce(documentThrowForce,ForceMode.Impulse);
+                }
+                
+            }
+            catch
+            {
+                Debug.Log("Cannot get passportScript");
+            }
+
+            if (!isReturningDocuments) ThrowDocument(document);
+            else if (document.TryGetComponent(out DocumentScript documentScript))
+            {
+                DocumentType docType = documentScript.docType;
+                Destroy(documentDictionary[docType],1);
+                documentDictionary.Remove(docType);
+            }
+
+            if (documentDictionary.Count == 0)
+            {
+                Destroy(currentEntrantBody,1);
+                Invoke("SummonEntrant",2);
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            ProcessReturnedDocument(other.gameObject);
+        }
+
+
         public static void SaveEntrant(EntrantData entrantData)
         {
             string json = entrantData.ToJSon();
@@ -389,12 +567,6 @@ namespace Entrants
             UnityEditor.AssetDatabase.Refresh ();
 #endif
         }
-        
-        /*public static void SaveEntrant(string surName, string firstName, string ID, Sex sex, string dateOfBirth, string issuingCity, Country origin, EntrantType type)
-        {
-            EntrantData entrantData = new EntrantData(surName, firstName, ID, sex,dateOfBirth., issuingCity, origin, type);
-            SaveEntrant(entrantData);
-        }*/
         
         public static EntrantData LoadEntrant(int index)
         {
@@ -408,5 +580,6 @@ namespace Entrants
 
             throw new Exception("File doesn't contain entrant with index " + index);
         }
+        
     }
 }

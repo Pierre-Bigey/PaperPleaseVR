@@ -28,11 +28,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         //Singleton instantiation
-        if (_instance != null && _instance != this) Destroy(this);
+        if (_instance != null && _instance != this) Destroy(gameObject);
         else
         {
             _instance = this;
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(gameObject);
         }
         
         //date initialization
@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
     {
         while (inGameTime.Item1 < endHour.Item1 )
         {
-            Debug.Log(inGameTime.ToString());
             AddMinute();
             yield return new WaitForSeconds(1 / inGameTimeRatio);
         }

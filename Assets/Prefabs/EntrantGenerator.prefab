@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3305013175951732924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3305013175951732922}
+  - component: {fileID: 3305013175951732923}
+  m_Layer: 0
+  m_Name: EntrantGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3305013175951732922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3305013175951732924}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3305013175951732923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3305013175951732924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254a3f25aa4f92549a3ed0348ead4583, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  antegriaPrefab: {fileID: 7371886423000174972, guid: faba9ec4d957af14aa1c84109954e989,
+    type: 3}
+  arstotzkaPrefab: {fileID: 7371886423000174972, guid: b021264998dab1745b4817a447a7a7fa,
+    type: 3}
+  imporPrefab: {fileID: 7371886423000174972, guid: 0f66f6059e3da1b42afc7d428c6a8790,
+    type: 3}
+  kolechiaPrefab: {fileID: 7371886423000174972, guid: ae9c0fe3552232048ba1082a67f520ec,
+    type: 3}
+  obristanPrefab: {fileID: 7371886423000174972, guid: cd1302ac3e6892249a29a2f5d7d2c186,
+    type: 3}
+  republiaPrefab: {fileID: 7371886423000174972, guid: 54f126f6448e2b8419d995a0bd2dd87a,
+    type: 3}
+  unitedFederationPrefab: {fileID: 7371886423000174972, guid: 03a65543f2686a7419504857e9bb72ee,
+    type: 3}
+  entryPermitPrefab: {fileID: 4098244989696051346, guid: cb86c8046c42aef4293ab2b1f0a1da05,
+    type: 3}
+  entryTicketPrefab: {fileID: 8930424393168831548, guid: b6134e9f8890b4b4e8ed7ea104347431,
+    type: 3}
+  IDCardPrefab: {fileID: 8930424393168831548, guid: cf770f6d6f0c4b74c94e235b936443f7,
+    type: 3}
+  entrantBody: {fileID: 1889313545690738, guid: b742a5761b128ed4bb195b68c0ae42f3,
+    type: 3}
+  surNamesTextAsset: {fileID: 4900000, guid: 2d0a72f3cbc7c484d9a0ebefda3d6b4a, type: 3}
+  firstNameMaleTextAsset: {fileID: 4900000, guid: 8cb050bc4235ce746bcf7d6ddad98263,
+    type: 3}
+  firstNameFemaleTextAsset: {fileID: 4900000, guid: 5e15f90cfc12a4743a685c6a471eae7d,
+    type: 3}
+  summon: 0

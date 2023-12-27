@@ -33,13 +33,12 @@ namespace Entrants
         [SerializeField] private TextAsset firstNameMaleTextAsset;
         [SerializeField] private TextAsset firstNameFemaleTextAsset;
 
-        [Header("RuntimeButtons")] [SerializeField]
-        private bool summon;
+        [Header("RuntimeButtons")] 
 
-        int maxAge = 75;
-        int minAge = 18;
+        private int maxAge = 75;
+        private int minAge = 18;
 
-        private EntrantPhotographer _entrantPhotographer;
+        
 
         private IDictionary<GameObject, EntrantData> entrantDict;
         private Random random;
@@ -52,80 +51,13 @@ namespace Entrants
 
         }
 
-        private void Start()
+        public GameObject SummonEntrantBody()
         {
-
-            _entrantPhotographer = FindObjectOfType<EntrantPhotographer>();
+            GameObject entrant = Instantiate(entrantBody);
+            return entrant;
         }
 
-        private void Update()
-        {
-            if (summon)
-            {
-                summon = false;
-                SummonEntrant();
-            }
-        }
-
-        private void SummonEntrant()
-        {
-            GameObject entrant = Instantiate(entrantBody, transform);
-            entrant.transform.Rotate(Vector3.up, 180);
-            EntrantData entrantData = GenerateEntrant();
-
-
-            int currentDay = (int) (GameManager.Instance.date - GameManager.Instance.startDate).TotalDays +1 ;
-            List<RuleDocToPresent> ruleDocToPresents = RulesManager.DocToPresentEachDay[currentDay];
-
-            foreach (var rule in ruleDocToPresents)
-            {
-                if (rule.subject.IsConcerned(entrantData.originCountry, entrantData.type))
-                {
-                    switch (rule.docToPresent)
-                    {
-                        case DocumentType.PASSPORT:
-                            SummonPassport(entrantData, new Vector3(0f, 0.9f, -0.5f));
-                            break;
-                        case DocumentType.ID_CARD:
-                            SummonIDCard(entrantData, new Vector3(0, 0.9f, -0.6f));
-                            break;
-                        case DocumentType.WORK_PASS:
-                            //TODO Summon WorkPass
-                            break;
-                        case DocumentType.DIPLO_AUTH:
-                            //TODO
-                            break;
-                        case DocumentType.ENTRY_PERMIT:
-                            SummonEntryPermit(entrantData, new Vector3(0.2f, 0.9f, -0.5f));
-                            break;
-                        case DocumentType.ENTRY_TICKET:
-                            SummonEntryTicket(entrantData, new Vector3(-0.2f, 0.9f, -0.5f));
-                            break;
-                        case DocumentType.ID_SUPPLEMENT:
-                            //TODO
-                            break;
-                        case DocumentType.GRANT_OF_ASYLUM:
-                            //TODO
-                            break;
-                        case DocumentType.ACCESS_PERMIT:
-                            //TODO
-                            break;
-                        case DocumentType.CERTIF_OF_VACCINATION:
-                            //TODO
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            
-            
-            
-            _entrantPhotographer.PhotoEntrant(entrantBody);
-
-        }
-
-        private void SummonPassport(EntrantData entrantData, Vector3 offset)
+        public GameObject SummonPassport(EntrantData entrantData, Vector3 offset)
         {
             GameObject passport;
             switch (entrantData.originCountry)
@@ -158,34 +90,38 @@ namespace Entrants
             passport.transform.position += offset;
             PassportScript passScript = passport.GetComponent<PassportScript>();
             passScript.SetData(entrantData.GetPassportData());
+            return passport;
         }
 
-        private void SummonEntryPermit(EntrantData entrantData, Vector3 offset)
+        public GameObject SummonEntryPermit(EntrantData entrantData, Vector3 offset)
         {
 
             GameObject entryPermit = Instantiate(entryPermitPrefab, transform);
             entryPermit.transform.position += offset;
             EntryPermitScript entryPermitScript = entryPermit.GetComponent<EntryPermitScript>();
             entryPermitScript.SetData(entrantData.GetEntryPermitData());
+            return entryPermit;
         }
 
-        private void SummonEntryTicket(EntrantData entrantData, Vector3 offset)
+        public GameObject SummonEntryTicket(EntrantData entrantData, Vector3 offset)
         {
             GameObject entryTicket = Instantiate(entryTicketPrefab, transform);
             entryTicket.transform.position += offset;
             EntryTicketScript entryTicketScript = entryTicket.GetComponent<EntryTicketScript>();
             entryTicketScript.SetData(entrantData.GetEntryTicketData());
+            return entryTicket;
         }
 
-        private void SummonIDCard(EntrantData entrantData, Vector3 offset)
+        public GameObject SummonIDCard(EntrantData entrantData, Vector3 offset)
         {
             GameObject idCard = Instantiate(IDCardPrefab, transform);
             idCard.transform.position += offset;
             IDCardScript idCardScript = idCard.GetComponent<IDCardScript>();
             idCardScript.SetData(entrantData.GetIDCardData());
+            return idCard;
         }
 
-        private EntrantData GenerateEntrant()
+        public EntrantData GenerateRandomEntrantData()
         {
             Sex sex = GetRandomSex();
             string surName = getRandomSurName(surNamesTextAsset, sex);

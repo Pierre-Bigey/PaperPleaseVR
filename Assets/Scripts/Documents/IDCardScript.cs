@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Documents;
 using Entrants;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IDCardScript : MonoBehaviour
+public class IDCardScript : DocumentScript
 {
     [SerializeField] private DocumentButton districtButton;
     [SerializeField] private DocumentButton nameButton;
@@ -18,7 +19,8 @@ public class IDCardScript : MonoBehaviour
     //(District districtName, string name, DateTime dob, int height, int weight)
     public void SetData((District, string, DateTime, int, int) data)
     {
-        DocumentType docType = DocumentType.ID_CARD;
+        docType = DocumentType.ID_CARD;
+        
         districtButton.Initialize(docType, InfoType.DISTRICT,data.Item1.ToString()+" DISTRICT");
         nameButton.Initialize(docType, InfoType.NAME,data.Item2);
         dobButton.Initialize(docType, InfoType.DOB,data.Item3.ToString("yyyy.MM.dd"));
