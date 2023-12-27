@@ -25,14 +25,7 @@ public class PassportScript : MonoBehaviour
     void Start()
     {
         //isOpened = false;
-        CorrectIsOpened();
-        
-    }
-
-    public void CorrectIsOpened()
-    {
-        passportOpened.SetActive(isOpened);
-        passportClosed.SetActive(!isOpened);
+        SetIsOpen(false);
     }
 
     //(string name, DateTime exp, string iss, Sex sex, DateTime dob, string id)
@@ -52,12 +45,17 @@ public class PassportScript : MonoBehaviour
     public void SwitchIsOpened()
     {
         isOpened = !isOpened;
-        CorrectIsOpened();
+        SetIsOpen(isOpened);
     }
 
     public void SetIsOpen(bool value)
     {
         isOpened = value;
-        CorrectIsOpened();
+        foreach (Transform child in transform)
+        {
+            if (child.name.Equals(passportClosed.name)) child.gameObject.SetActive(!value);
+            else child.gameObject.SetActive(value);
+        }
     }
+
 }

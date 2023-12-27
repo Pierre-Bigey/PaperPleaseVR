@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1417456972517285199}
   - component: {fileID: 3003918982442086753}
   - component: {fileID: 6395093500496730790}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PassportAntegriaOpened
-  m_TagString: Passport
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

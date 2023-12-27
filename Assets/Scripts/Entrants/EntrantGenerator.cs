@@ -158,7 +158,6 @@ namespace Entrants
             passport.transform.position += offset;
             PassportScript passScript = passport.GetComponent<PassportScript>();
             passScript.SetData(entrantData.GetPassportData());
-            passScript.SetIsOpen(false);
         }
 
         private void SummonEntryPermit(EntrantData entrantData, Vector3 offset)

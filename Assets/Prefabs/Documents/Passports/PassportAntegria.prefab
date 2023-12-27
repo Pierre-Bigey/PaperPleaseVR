@@ -57,7 +57,6 @@ MonoBehaviour:
   dobButton: {fileID: 2765425542963231855}
   idButton: {fileID: 866758072581099393}
   photoButton: {fileID: 5682708044768961568}
-  isOpened: 1
 --- !u!54 &2442323467502274945
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -359,21 +358,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PassportOpened
-      objectReference: {fileID: 0}
-    - target: {fileID: 722722339527503146, guid: 19fd4de7c5536b640b4e007ccbc7d31e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 722722339527503146, guid: 19fd4de7c5536b640b4e007ccbc7d31e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 722722339527503146, guid: 19fd4de7c5536b640b4e007ccbc7d31e,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 1150190480642655715, guid: 19fd4de7c5536b640b4e007ccbc7d31e,
         type: 3}
